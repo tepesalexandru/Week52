@@ -6,7 +6,6 @@ interface Props {
 }
 
 export default function WeeklyGoals({}: Props): ReactElement {
-    console.log("hello")
 
     useEffect(() => {
         store.reducerManager.add('test', weeklyGoalsSlice.reducer);

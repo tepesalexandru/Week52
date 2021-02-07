@@ -4,10 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Week52.WebAPI", "Week52\Week52.WebAPI.csproj", "{A31553F6-1340-417C-8923-552FD62386BE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{653F8B96-FFAC-4B3E-B4D9-12E1F208CC1D} = {653F8B96-FFAC-4B3E-B4D9-12E1F208CC1D}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Week52.DataAccess", "Week52.DataAccess\Week52.DataAccess.csproj", "{653F8B96-FFAC-4B3E-B4D9-12E1F208CC1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Week52.Business", "Week52.Business\Week52.Business.csproj", "{ACA64459-AA60-4706-8D29-231033AA7BBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Week52.Business", "Week52.Business\Week52.Business.csproj", "{ACA64459-AA60-4706-8D29-231033AA7BBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

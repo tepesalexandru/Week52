@@ -43,8 +43,6 @@ export function createReducerManager(initialReducers: any) {
 
     // Adds a new reducer with the specified key
     add: (key: any, reducer: any) => {
-      console.log("hello", key);
-      console.log("bau", reducer);
       if (!key || reducers[key]) {
         return
       }
