@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Week52.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
+using Week52.DataAccess.Context;
 using System;
+using Week52.Business.Managers;
+using Week52.DataAccess.Repositories;
 
 namespace Week52
 {
@@ -24,7 +24,7 @@ namespace Week52
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddDbContext<Week52DbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("Default")));
 
@@ -37,6 +37,10 @@ namespace Week52
             {
                 configuration.RootPath = "ClientApp/build";
             });
+            services.AddScoped(typeof(IGenericRepository), typeof(GenericRepository));
+            services.AddScoped<IGoalRepository, GoalRepository>();
+            services.AddScoped<ITaskManager, TaskManager>();
+            services.AddScoped<IGoalManager, GoalManager>();
 
         }
 

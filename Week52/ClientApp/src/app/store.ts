@@ -1,15 +1,18 @@
 import { combineReducers } from "redux";
 import thunk from "redux-thunk";
 import { configureStore } from "@reduxjs/toolkit";
+import { Goal, Task, weeklyGoalsSlice } from "../features/Weekly/Goals/weeklyGoalsSlice";
 
 // The top-level state object
-export interface ApplicationState {}
+export interface ApplicationState {
+  goals: Goal[]
+}
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
 // the reducer with the matching name. It's important that the names match exactly, and that the reducer
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
-  dummyReducer: (state: any, action: any) => 3
+  goals: weeklyGoalsSlice.reducer
 };
 
 export function createReducerManager(initialReducers: any) {

@@ -1,23 +1,150 @@
-import React, { ReactElement, useEffect } from 'react'
-import store from '../../../index';
-import { weeklyGoalsSlice } from './weeklyGoalsSlice';
-interface Props {
-    
-}
+import { Button } from "@material-ui/core";
+import React, { ReactElement, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
+import { ApplicationState } from "../../../app/store";
+import { _fetchGoals, Goal, Task, _deleteGoal } from "./weeklyGoalsSlice";
+import { makeStyles } from "@material-ui/core";
+import { deleteGoal } from "./goalService";
+
+const useStyles = makeStyles((theme) => ({
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: theme.palette.secondary.contrastText,
+    marginBottom: 0,
+  },
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "16px 24px",
+    background: theme.palette.secondary.main,
+    marginBottom: 36,
+  },
+  body: {
+    width: "80%",
+    margin: "auto",
+  },
+  goalRoot: {
+    background: theme.palette.secondary.main,
+    borderRadius: 12,
+    padding: "12px 24px",
+    margin: "8px 0",
+    color: theme.palette.secondary.contrastText,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  taskRoot: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  taskBody: {
+    background: theme.palette.secondary.main,
+    borderRadius: 12,
+    padding: "12px 24px",
+    margin: "8px 0",
+    color: theme.palette.secondary.contrastText,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "95%",
+  },
+}));
+
+interface Props {}
 
 export default function WeeklyGoals({}: Props): ReactElement {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const classes = useStyles();
+  const goals = useSelector((state: ApplicationState) => state.goals);
+  const [totalMinutes, setTotalMinutes] = useState<number>(0);
+  const [totalHours, setTotalHours] = useState<number>(0);
+  useEffect(() => {
+    dispatch(_fetchGoals());
+  }, []);
 
-    useEffect(() => {
-        store.reducerManager.add('test', weeklyGoalsSlice.reducer);
-        store.replaceReducer(store.reducerManager.reduce);
-        return () => {
-            store.reducerManager.remove('test');
-        }
-    }, [])
+  useEffect(() => {
+    let neededMinutes = 0;
+    goals.map((goal: Goal) => {
+      goal.tasks.map((task: Task) => {
+        neededMinutes += task.duration;
+      });
+    });
+    setTotalMinutes(neededMinutes);
+    setTotalHours(+(neededMinutes / 60).toFixed(2));
+  }, [JSON.stringify(goals)]);
 
-    return (
-        <div>
-            Weekly Goals
+  const renderTasks = (tasks: Task[]) => {
+    return tasks.map((task) => {
+      return (
+        <div className={classes.taskRoot}>
+          <div className={classes.taskBody}>
+            <span>{task.name}</span>
+            <span>{task.duration} minutes</span>
+          </div>
         </div>
-    )
+      );
+    });
+  };
+
+  const renderGoals = () => {
+    return goals.map((goal: Goal) => {
+      return (
+        <React.Fragment>
+          <div className={classes.goalRoot}>
+            <span>{goal.name}</span>
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => history.push(`/create-task/${goal.id}`)}
+              >
+                Add Task
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => dispatch(_deleteGoal(goal.id))}
+                style={{ marginLeft: 16 }}
+              >
+                Delete Goal
+              </Button>
+            </div>
+          </div>
+          {renderTasks(goal.tasks)}
+        </React.Fragment>
+      );
+    });
+  };
+
+  return (
+    <div>
+      <div className={classes.header}>
+        <p className={classes.title}>
+          Your tasks for this Week - {totalMinutes} minutes ({totalHours} hours)
+        </p>
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => history.push("/create-goal")}
+          >
+            Create Goal
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => history.push("/create-week-plan")}
+            style={{marginLeft: 16}}
+          >
+            Create Week Plan
+          </Button>
+        </div>
+      </div>
+      <div className={classes.body}>{renderGoals()}</div>
+    </div>
+  );
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Week52.DataAccess.Context;
 
 namespace Week52.DataAccess.Migrations
 {
     [DbContext(typeof(Week52DbContext))]
-    partial class Week52DbContextModelSnapshot : ModelSnapshot
+    [Migration("20210208212031_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,10 +41,13 @@ namespace Week52.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("BasicGoalId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Duration")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("GoalId")
+                    b.Property<Guid?>("GoalId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -50,20 +55,16 @@ namespace Week52.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GoalId");
+                    b.HasIndex("BasicGoalId");
 
                     b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicTask", b =>
                 {
-                    b.HasOne("Week52.DataAccess.Entities.BasicGoal", "Goal")
+                    b.HasOne("Week52.DataAccess.Entities.BasicGoal", null)
                         .WithMany("Tasks")
-                        .HasForeignKey("GoalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Goal");
+                        .HasForeignKey("BasicGoalId");
                 });
 
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicGoal", b =>

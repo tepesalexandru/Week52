@@ -3,8 +3,8 @@ import { Container } from 'reactstrap';
 
 export default (props: { children?: React.ReactNode }) => (
     <React.Fragment>
-        <Container>
+        {/* <Container> */}
             {props.children}
-        </Container>
+        {/* </Container> */}
     </React.Fragment>
 );
