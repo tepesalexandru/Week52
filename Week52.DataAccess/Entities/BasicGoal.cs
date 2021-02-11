@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace Week52.DataAccess.Entities
 {
-    public class SimpleTask : BaseEntity
+    public class BasicGoal : BaseEntity
     {
+        public BasicGoal()
+        {
+            Tasks = new List<BasicTask>();
+        }
         public string Name { get; set; }
-        public int Duration { get; set; }
+        public virtual ICollection<BasicTask> Tasks { get; set; }
     }
 }

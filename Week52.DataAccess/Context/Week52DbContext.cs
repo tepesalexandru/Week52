@@ -12,10 +12,12 @@ namespace Week52.DataAccess.Context
     {
         public Week52DbContext(DbContextOptions<Week52DbContext> options): base(options)
         {
-
+            
         }
 
-        public DbSet<SimpleTask> SimpleTasks { get; set; }
+        public DbSet<BasicTask> Tasks { get; set; }
+        public DbSet<BasicGoal> Goals { get; set; }
+
 
     }
 }

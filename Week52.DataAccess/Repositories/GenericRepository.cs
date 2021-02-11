@@ -20,7 +20,7 @@ namespace Week52.DataAccess.Repositories
     }
     public class GenericRepository : IGenericRepository
     {
-        private readonly Week52DbContext _dbContext;
+        public readonly Week52DbContext _dbContext;
         public GenericRepository(Week52DbContext context)
         {
             _dbContext = context;
