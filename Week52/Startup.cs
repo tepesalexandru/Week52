@@ -41,7 +41,7 @@ namespace Week52
             services.AddScoped<IGoalRepository, GoalRepository>();
             services.AddScoped<ITaskManager, TaskManager>();
             services.AddScoped<IGoalManager, GoalManager>();
-
+            services.AddScoped<ILookupManager, LookupManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

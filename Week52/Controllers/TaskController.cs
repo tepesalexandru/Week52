@@ -34,6 +34,14 @@ namespace Week52.WebAPI.Controllers
             return Ok();
         } 
 
+        [HttpPatch]
+        [Route("addProgress/{TaskId}/{minutes}")]
+        public IActionResult AddProgress(Guid TaskId, int minutes)
+        {
+            _taskManager.AddTaskProgress(TaskId, minutes);
+            return Ok();
+        }
+
         [HttpDelete]
         [Route("delete/{Id}")]
         public IActionResult Delete(Guid Id)
