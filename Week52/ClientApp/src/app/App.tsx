@@ -1,19 +1,28 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import Layout from "../shared/Layout";
 
 import { RenderComponentRoutes } from "./routes/routeHelper";
 import { routes } from "./routes/routes";
-import {makeStyles, useTheme} from '@material-ui/core';
+import { makeStyles } from "@material-ui/core";
+import { useDispatch } from "react-redux";
+import { getWeekNumber } from "../features/Helpers";
+import { setCurrentWeek } from "../features/Weekly/Slices/metadataSlice";
 const useStyles = makeStyles((theme) => ({
-    root: {
-        // background: 
-        background: theme.palette.background.default,
-        height: 'auto'
-    }
+  root: {
+    background: theme.palette.background.default,
+    height: "auto",
+  },
 }));
 
 export default () => {
-    const classes = useStyles();
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const currentWeek = getWeekNumber(new Date());
+    dispatch(setCurrentWeek(currentWeek));
+  }, []);
+
   return (
     <div className={classes.root}>
       <Layout>{RenderComponentRoutes(routes)}</Layout>

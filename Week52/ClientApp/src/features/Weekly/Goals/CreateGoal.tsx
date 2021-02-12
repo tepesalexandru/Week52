@@ -3,10 +3,12 @@ import React, { ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router";
 import InputWithValidation from "../../../shared/InputWithValidation";
-import { createTask } from "./taskService";
-import { Goal } from "./weeklyGoalsSlice";
+import { createTask } from "../Services/taskService";
+import { Goal } from "../Slices/weeklyGoalsSlice";
 import { makeStyles } from "@material-ui/core";
-import { createGoal } from "./goalService";
+import { createGoal } from "../Services/goalService";
+import { useSelector } from "react-redux";
+import { ApplicationState } from "../../../app/store";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,7 +37,9 @@ export default function CreateGoal({}: Props): ReactElement {
   const history = useHistory();
   const formHook = useForm<Goal>();
   const classes = useStyles();
+  const weekNumber = useSelector((state: ApplicationState) => state.metadata.weekSelected);
   const onSubmit = (formValues: Goal) => {
+    formValues.weekNumber = weekNumber;
     createGoal(formValues).then(history.goBack);
   };
 

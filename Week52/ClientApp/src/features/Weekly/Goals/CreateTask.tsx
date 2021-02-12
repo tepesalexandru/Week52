@@ -3,8 +3,8 @@ import React, { ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory, useParams } from "react-router";
 import InputWithValidation from "../../../shared/InputWithValidation";
-import { createTask } from "./taskService";
-import { Task } from "./weeklyGoalsSlice";
+import { createTask } from "../Services/taskService";
+import { Task } from "../Slices/weeklyGoalsSlice";
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({

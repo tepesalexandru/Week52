@@ -26,6 +26,13 @@ namespace Week52.WebAPI.Controllers
             return Ok(_goalManager.GetGoals());
         }
 
+        [HttpGet]
+        [Route("get/{weekNumber}")]
+        public IActionResult GetGoalsForWeek(int weekNumber)
+        {
+            return Ok(_goalManager.GetGoalsForWeek(weekNumber));
+        }
+
         [HttpPost]
         [Route("create")]
         public IActionResult CreateGoal(BasicGoal goal)

@@ -1,7 +1,7 @@
 import { Button } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { ApplicationState } from "../../../app/store";
 import {
   _fetchGoals,
@@ -9,6 +9,7 @@ import {
   Task,
   _deleteGoal,
   _fetchGoalsForWeek,
+  _deleteTask,
 } from "../Slices/weeklyGoalsSlice";
 import { makeStyles } from "@material-ui/core";
 import { deleteGoal } from "../Services/goalService";
@@ -61,19 +62,20 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {}
 
-export default function WeeklyGoals({}: Props): ReactElement {
+export default function WeekPlan({}: Props): ReactElement {
   const dispatch = useDispatch();
+  const params: any = useParams();
   const history = useHistory();
   const classes = useStyles();
-  const currentWeek = useSelector(
-    (state: ApplicationState) => state.metadata.currentWeek
+  const weekNumber = useSelector(
+    (state: ApplicationState) => state.metadata.weekSelected
   );
   const goals = useSelector((state: ApplicationState) => state.goals);
   const [totalMinutes, setTotalMinutes] = useState<number>(0);
   const [totalHours, setTotalHours] = useState<number>(0);
   useEffect(() => {
-    dispatch(_fetchGoalsForWeek(currentWeek));
-  }, [currentWeek]);
+    dispatch(_fetchGoalsForWeek(weekNumber || params.weekNumber));
+  }, []);
 
   useEffect(() => {
     let neededMinutes = 0;
@@ -89,10 +91,20 @@ export default function WeeklyGoals({}: Props): ReactElement {
   const renderTasks = (tasks: Task[]) => {
     return tasks.map((task) => {
       return (
-        <div className={classes.taskRoot}>
+        <div key={task.id} className={classes.taskRoot}>
           <div className={classes.taskBody}>
             <span>{task.name}</span>
-            <span>{task.duration} minutes</span>
+            <div>
+              <span>{task.duration} minutes</span>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => dispatch(_deleteTask(task.id))}
+                style={{ marginLeft: 16 }}
+              >
+                Delete Task
+              </Button>
+            </div>
           </div>
         </div>
       );
@@ -102,11 +114,11 @@ export default function WeeklyGoals({}: Props): ReactElement {
   const renderGoals = () => {
     return goals.map((goal: Goal) => {
       return (
-        <React.Fragment>
+        <React.Fragment key={goal.id}>
           <div className={classes.goalRoot}>
             <span>{goal.name}</span>
             <div>
-              {/* <Button
+              <Button
                 variant="contained"
                 color="primary"
                 onClick={() => history.push(`/create-task/${goal.id}`)}
@@ -120,7 +132,7 @@ export default function WeeklyGoals({}: Props): ReactElement {
                 style={{ marginLeft: 16 }}
               >
                 Delete Goal
-              </Button> */}
+              </Button>
             </div>
           </div>
           {renderTasks(goal.tasks)}
@@ -136,13 +148,13 @@ export default function WeeklyGoals({}: Props): ReactElement {
           Your tasks for this Week - {totalMinutes} minutes ({totalHours} hours)
         </p>
         <div>
-          {/* <Button
+          <Button
             variant="contained"
             color="primary"
             onClick={() => history.push("/create-goal")}
           >
             Create Goal
-          </Button> */}
+          </Button>
           <Button
             variant="contained"
             color="primary"
