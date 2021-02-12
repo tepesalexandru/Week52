@@ -1,20 +1,16 @@
-import { lazy } from 'react';
 import Landing from '../../shared/Home';
 
 import WeeklyGoals from '../../features/Weekly/Goals/WeeklyGoals';
 import CreateTask from '../../features/Weekly/Goals/CreateTask';
-import CreateGoal from '../../features/Weekly/Goals/CreateGaol';
-import CreateWeekPlan from '../../features/Weekly/WeekPlans/CreateWeekPlan';
+import CreateGoal from '../../features/Weekly/Goals/CreateGoal';
+import YearOverview from '../../features/Weekly/WeekPlans/YearOverview';
+import WeekPlan from '../../features/Weekly/WeekPlans/WeekPlan';
 
 export const routes = [
     {
         path: '/',
-        component: Landing,
+        component: WeeklyGoals,
         exact: true
-    },
-    {
-        path: '/weekly-goals',
-        component: WeeklyGoals
     },
     {
         path: '/create-task/:id',
@@ -25,7 +21,12 @@ export const routes = [
         component: CreateGoal
     },
     {
-        path: '/create-week-plan',
-        component: CreateWeekPlan
+        path: '/year-overview',
+        component: YearOverview
+    }
+    ,
+    {
+        path: '/week-plan/:weekNumber',
+        component: WeekPlan
     }
 ]

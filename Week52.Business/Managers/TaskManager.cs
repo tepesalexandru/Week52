@@ -12,6 +12,7 @@ namespace Week52.Business.Managers
     {
         IEnumerable<BasicTask> GetTasks();
         BasicTask CreateTask(Guid GoalId, BasicTask task);
+        Guid DeleteTask(BasicTask Task);
     }
     public class TaskManager : ITaskManager
     {
@@ -27,9 +28,9 @@ namespace Week52.Business.Managers
             return _goalRepository.AddTask(GoalId, task);
         }
 
-        public void DeleteTask(BasicTask task)
+        public Guid DeleteTask(BasicTask task)
         {
-            _goalRepository.DeleteTask(task);
+            return _goalRepository.DeleteTask(task);
         }
 
         public IEnumerable<BasicTask> GetTasks()

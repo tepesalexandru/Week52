@@ -1,8 +1,13 @@
 import axios from 'axios';
-import { Goal } from './weeklyGoalsSlice';
+import { Goal } from '../Slices/weeklyGoalsSlice';
 
 export const getGoals = async () => {
     const response = await axios.get("api/Goal/get");
+    return response.data;
+}
+
+export const getGoalsForWeek = async (weekNumber: number) => {
+    const response = await axios.get(`api/Goal/get/${weekNumber}`);
     return response.data;
 }
 
@@ -12,7 +17,6 @@ export const createGoal = async (goal: Goal) => {
 }
 
 export const deleteGoal = async (id: string) => {
-    console.log("yoo");
     const response = await axios.delete(`api/Goal/delete/${id}`);
     return response.data;
 }

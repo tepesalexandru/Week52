@@ -13,6 +13,7 @@ namespace Week52.DataAccess.Entities
             Tasks = new List<BasicTask>();
         }
         public string Name { get; set; }
+        public int? WeekNumber { get; set; }
         public virtual ICollection<BasicTask> Tasks { get; set; }
     }
 }

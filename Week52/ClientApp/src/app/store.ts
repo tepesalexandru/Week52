@@ -1,10 +1,12 @@
 import { combineReducers } from "redux";
 import thunk from "redux-thunk";
 import { configureStore } from "@reduxjs/toolkit";
-import { Goal, Task, weeklyGoalsSlice } from "../features/Weekly/Goals/weeklyGoalsSlice";
+import { Goal, Task, weeklyGoalsSlice } from "../features/Weekly/Slices/weeklyGoalsSlice";
+import { metadataSlice, MetadataState } from "../features/Weekly/Slices/metadataSlice";
 
 // The top-level state object
 export interface ApplicationState {
+  metadata: MetadataState,
   goals: Goal[]
 }
 
@@ -12,6 +14,7 @@ export interface ApplicationState {
 // the reducer with the matching name. It's important that the names match exactly, and that the reducer
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
+  metadata: metadataSlice.reducer,
   goals: weeklyGoalsSlice.reducer
 };
 

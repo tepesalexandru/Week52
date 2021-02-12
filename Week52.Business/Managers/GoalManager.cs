@@ -11,6 +11,7 @@ namespace Week52.Business.Managers
     public interface IGoalManager
     {
         IEnumerable<BasicGoal> GetGoals();
+        IEnumerable<BasicGoal> GetGoalsForWeek(int weekNumber);
         BasicGoal CreateGoal(BasicGoal goal);
         Guid DeleteGoal(BasicGoal goal);
     }
@@ -34,6 +35,12 @@ namespace Week52.Business.Managers
         public IEnumerable<BasicGoal> GetGoals()
         {
             List<BasicGoal> goals = _goalRepository.GetGoals().ToList();
+            return goals;
+        }
+
+        public IEnumerable<BasicGoal> GetGoalsForWeek(int weekNumber)
+        {
+            List<BasicGoal> goals = _goalRepository.GetGoalsForWeek(weekNumber).ToList();
             return goals;
         }
     }

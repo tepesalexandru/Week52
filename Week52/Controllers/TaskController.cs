@@ -33,5 +33,14 @@ namespace Week52.WebAPI.Controllers
             _taskManager.CreateTask(GoalId, task);
             return Ok();
         } 
+
+        [HttpDelete]
+        [Route("delete/{Id}")]
+        public IActionResult Delete(Guid Id)
+        {
+            BasicTask taskToDelete = _taskManager.GetTasks().FirstOrDefault(x => x.Id == Id);
+            return Ok(_taskManager.DeleteTask(taskToDelete));
+        }
+
     }
 }
