@@ -77,22 +77,36 @@ export default function WeeklyGoals({}: Props): ReactElement {
 
   useEffect(() => {
     let neededMinutes = 0;
+    let totalProgress = 0;
     goals.map((goal: Goal) => {
       goal.tasks.map((task: Task) => {
         neededMinutes += task.duration;
+        totalProgress += task.progress;
       });
     });
-    setTotalMinutes(neededMinutes);
-    setTotalHours(+(neededMinutes / 60).toFixed(2));
+    let remainingMinutes = neededMinutes - totalProgress;
+    remainingMinutes = Math.max(0, remainingMinutes);
+    setTotalMinutes(remainingMinutes);
+    setTotalHours(+(remainingMinutes / 60).toFixed(2));
   }, [JSON.stringify(goals)]);
+
+  const getOvertime = (initial: number, progress: number) => {
+    if (progress > initial)
+      return " | " + (progress - initial).toString() + " minutes overtime.";
+    return "";
+  };
 
   const renderTasks = (tasks: Task[]) => {
     return tasks.map((task) => {
       return (
-        <div className={classes.taskRoot}>
-          <div className={classes.taskBody}>
+        <div key={task.id} className={classes.taskRoot}>
+          <div className={classes.taskBody} style={{opacity: task.completed ? 0.4 : 1}}>
             <span>{task.name}</span>
-            <span>{task.duration} minutes</span>
+            <span>
+              {task.duration} minutes | {task.progress} minutes (
+              {(Math.min(100, (task.progress / task.duration) * 100).toFixed(2))}%)
+              {getOvertime(task.duration, task.progress)}
+            </span>
           </div>
         </div>
       );
@@ -102,26 +116,10 @@ export default function WeeklyGoals({}: Props): ReactElement {
   const renderGoals = () => {
     return goals.map((goal: Goal) => {
       return (
-        <React.Fragment>
+        <React.Fragment key={goal.id}>
           <div className={classes.goalRoot}>
             <span>{goal.name}</span>
-            <div>
-              {/* <Button
-                variant="contained"
-                color="primary"
-                onClick={() => history.push(`/create-task/${goal.id}`)}
-              >
-                Add Task
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => dispatch(_deleteGoal(goal.id))}
-                style={{ marginLeft: 16 }}
-              >
-                Delete Goal
-              </Button> */}
-            </div>
+            <div></div>
           </div>
           {renderTasks(goal.tasks)}
         </React.Fragment>
@@ -136,13 +134,6 @@ export default function WeeklyGoals({}: Props): ReactElement {
           Your tasks for this Week - {totalMinutes} minutes ({totalHours} hours)
         </p>
         <div>
-          {/* <Button
-            variant="contained"
-            color="primary"
-            onClick={() => history.push("/create-goal")}
-          >
-            Create Goal
-          </Button> */}
           <Button
             variant="contained"
             color="primary"
@@ -150,6 +141,14 @@ export default function WeeklyGoals({}: Props): ReactElement {
             style={{ marginLeft: 16 }}
           >
             Year Overview
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => history.push(`/add-progress`)}
+            style={{ marginLeft: 16 }}
+          >
+            Add Progress
           </Button>
         </div>
       </div>

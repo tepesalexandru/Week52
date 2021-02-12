@@ -11,6 +11,8 @@ namespace Week52.DataAccess.Entities
     {
         public string Name { get; set; }
         public int Duration { get; set; }
+        public int Progress { get; set; }
+        public bool Completed { get; set; }
         [ForeignKey("Goal")]
         public Guid GoalId { get; set; }
         public BasicGoal Goal { get; set; }

@@ -5,7 +5,8 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
-    margin: "4px 0"
+    margin: "4px 0",
+    width: 300
   },
   label: {
     color: theme.palette.secondary.contrastText,
@@ -19,6 +20,7 @@ interface Props {
   name: string;
   formHook: any;
   type?: string;
+  label?: string;
   validation?: {
     required?: boolean;
     pattern?: RegExp;
@@ -34,6 +36,7 @@ export default function InputWithValidation(props: Props): ReactElement {
   };
 
   const getLabel = () => {
+    if (props.label) return capitalize(props.label)
     return capitalize(props.name);
   };
 
