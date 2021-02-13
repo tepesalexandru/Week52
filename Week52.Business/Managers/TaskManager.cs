@@ -12,7 +12,6 @@ namespace Week52.Business.Managers
     {
         IEnumerable<BasicTask> GetTasks();
         BasicTask CreateTask(Guid GoalId, BasicTask task);
-        Guid AddTaskProgress(Guid TaskId, int minutes);
         Guid DeleteTask(BasicTask Task);
     }
     public class TaskManager : ITaskManager
@@ -23,11 +22,6 @@ namespace Week52.Business.Managers
         {
             _genericRepository = genericRepository;
             _goalRepository = goalRepository;
-        }
-
-        public Guid AddTaskProgress(Guid TaskId, int minutes)
-        {
-            return _goalRepository.AddTaskProgress(TaskId, minutes);
         }
 
         public BasicTask CreateTask(Guid GoalId, BasicTask task)

@@ -17,13 +17,6 @@ namespace Week52.WebAPI.Controllers
         {
             _lookupManager = lookupManager;
         }
-        [HttpGet]
-        [Route("Goals/{Week}")]
-        public IActionResult GetGoalsForWeek(int Week)
-        {
-            var goals = _lookupManager.GetGoalsForWeek(Week);
-            return Ok(goals);
-        }
 
         [HttpGet]
         [Route("Tasks/{GoalId}")]

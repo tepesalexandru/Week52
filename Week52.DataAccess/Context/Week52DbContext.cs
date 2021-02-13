@@ -17,7 +17,9 @@ namespace Week52.DataAccess.Context
 
         public DbSet<BasicTask> Tasks { get; set; }
         public DbSet<BasicGoal> Goals { get; set; }
-
+        public DbSet<BasicDay> Days { get; set; }
+        public DbSet<BasicWeek> Weeks { get; set; }
+        public DbSet<BasicProgress> Progress { get; set; }
 
     }
 }

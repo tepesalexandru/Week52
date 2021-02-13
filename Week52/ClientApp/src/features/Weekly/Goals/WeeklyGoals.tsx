@@ -5,14 +5,14 @@ import { useHistory } from "react-router";
 import { ApplicationState } from "../../../app/store";
 import {
   _fetchGoals,
-  Goal,
-  Task,
   _deleteGoal,
   _fetchGoalsForWeek,
 } from "../Slices/weeklyGoalsSlice";
 import { makeStyles } from "@material-ui/core";
 import { deleteGoal } from "../Services/goalService";
 import WeekSidebar from "./WeekSidebar";
+import { _fetchWeek } from "../Slices/weekSlice";
+import { Goal, Task } from "../../../shared/Interfaces";
 
 const useStyles = makeStyles((theme) => ({
   bodyRoot: {
@@ -77,7 +77,8 @@ export default function WeeklyGoals({}: Props): ReactElement {
   const [totalMinutes, setTotalMinutes] = useState<number>(0);
   const [totalHours, setTotalHours] = useState<number>(0);
   useEffect(() => {
-    dispatch(_fetchGoalsForWeek(currentWeek));
+    if (currentWeek != 0)
+    dispatch(_fetchWeek(currentWeek));
   }, [currentWeek]);
 
   useEffect(() => {

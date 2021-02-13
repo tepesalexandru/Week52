@@ -12,10 +12,8 @@ namespace Week52.DataAccess.Repositories
     public interface IGoalRepository
     {
         IEnumerable<BasicGoal> GetGoals();
-        IEnumerable<BasicGoal> GetGoalsForWeek(int weekNumber);
         BasicGoal CreateGoal(BasicGoal goal);
         BasicTask AddTask(Guid GoalId, BasicTask task);
-        Guid AddTaskProgress(Guid TaskId, int minutes);
         Guid DeleteGoal(BasicGoal goal);
         Guid DeleteTask(BasicTask task);
     }
@@ -61,21 +59,6 @@ namespace Week52.DataAccess.Repositories
         {
             var goals = _dbContext.Goals.Include(x => x.Tasks).ToList();
             return goals;
-        }
-
-        public IEnumerable<BasicGoal> GetGoalsForWeek(int weekNumber)
-        {
-            var goals = _dbContext.Goals.Where(x => x.WeekNumber == weekNumber).Include(x => x.Tasks).ToList();
-            return goals;
-        }
-
-        public Guid AddTaskProgress(Guid TaskId, int minutes)
-        {
-            var task = _dbContext.Tasks.FirstOrDefault(x => x.Id == TaskId);
-            task.Progress += minutes;
-            if (task.Progress >= task.Duration) task.Completed = true;
-            _dbContext.SaveChanges();
-            return task.Id;
         }
     }
 

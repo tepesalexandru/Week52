@@ -1,21 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { Goal, Task } from "../../../shared/Interfaces";
 import { deleteGoal, getGoals, getGoalsForWeek } from "../Services/goalService";
 import { deleteTask, getTasks } from "../Services/taskService";
-
-export interface Task {
-  id: string;
-  name: string;
-  duration: number;
-  completed: boolean;
-  progress: number;
-}
-
-export interface Goal {
-  id: string;
-  name: string;
-  weekNumber?: number;
-  tasks: Task[];
-}
 
 const INITIAL_STATE: Goal[] = [];
 

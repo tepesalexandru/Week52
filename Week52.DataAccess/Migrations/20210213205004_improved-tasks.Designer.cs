@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Week52.DataAccess.Context;
 
 namespace Week52.DataAccess.Migrations
 {
     [DbContext(typeof(Week52DbContext))]
-    partial class Week52DbContextModelSnapshot : ModelSnapshot
+    [Migration("20210213205004_improved-tasks")]
+    partial class improvedtasks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,15 +27,18 @@ namespace Week52.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("BasicWeekId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("DayNumber")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("WeekId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("WeekNumber")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WeekId");
+                    b.HasIndex("BasicWeekId");
 
                     b.ToTable("Days");
                 });
@@ -120,13 +125,9 @@ namespace Week52.DataAccess.Migrations
 
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicDay", b =>
                 {
-                    b.HasOne("Week52.DataAccess.Entities.BasicWeek", "Week")
+                    b.HasOne("Week52.DataAccess.Entities.BasicWeek", null)
                         .WithMany("Days")
-                        .HasForeignKey("WeekId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Week");
+                        .HasForeignKey("BasicWeekId");
                 });
 
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicGoal", b =>

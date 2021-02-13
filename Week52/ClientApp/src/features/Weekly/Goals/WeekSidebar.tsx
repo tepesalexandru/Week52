@@ -1,6 +1,10 @@
 import React, { ReactElement, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import SidebarItem from "./SidebarItem";
+import { useDispatch, useSelector } from "react-redux";
+import { setDayIdSelected } from "../Slices/metadataSlice";
+import { ApplicationState } from "../../../app/store";
+import { Day } from "../../../shared/Interfaces";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,22 +39,25 @@ interface Props {}
 
 export default function WeekSidebar({}: Props): ReactElement {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [selectedMenuItem, setSelectedMenuItem] = useState(null);
+  const days = useSelector((state: ApplicationState) => state.week.days);
+
+  const selectDay = (ref: any, dayId: string) => {
+    setSelectedMenuItem(ref);
+    dispatch(setDayIdSelected(dayId));
+  };
 
   const renderDays = () => {
-    const days: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
-      days.push(
+    return days.map((day: Day) => {
+      return (
         <SidebarItem
-        key={`sidebar-day-${i + 1}`}
-          label={`Day ${i + 1}`}
-          selectedItem={selectedMenuItem}
-          onClick={setSelectedMenuItem}
+          key={day.id}
+          onClick={(ref: any) => selectDay(ref, day.id)}
+          label={`Day ${day.dayNumber}`}
         />
       );
-    }
-    return days;
+    });
   };
 
   return (
