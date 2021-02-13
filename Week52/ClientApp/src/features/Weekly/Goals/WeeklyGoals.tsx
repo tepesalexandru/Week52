@@ -12,8 +12,12 @@ import {
 } from "../Slices/weeklyGoalsSlice";
 import { makeStyles } from "@material-ui/core";
 import { deleteGoal } from "../Services/goalService";
+import WeekSidebar from "./WeekSidebar";
 
 const useStyles = makeStyles((theme) => ({
+  bodyRoot: {
+    display: "flex",
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -26,11 +30,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     padding: "16px 24px",
     background: theme.palette.secondary.main,
-    marginBottom: 36,
   },
   body: {
     width: "80%",
     margin: "auto",
+    marginTop: 36,
+    marginLeft: 30
   },
   goalRoot: {
     background: theme.palette.secondary.main,
@@ -100,11 +105,15 @@ export default function WeeklyGoals({}: Props): ReactElement {
     return tasks.map((task) => {
       return (
         <div key={task.id} className={classes.taskRoot}>
-          <div className={classes.taskBody} style={{opacity: task.completed ? 0.4 : 1}}>
+          <div
+            className={classes.taskBody}
+            style={{ opacity: task.completed ? 0.4 : 1 }}
+          >
             <span>{task.name}</span>
             <span>
               {task.duration} minutes | {task.progress} minutes (
-              {(Math.min(100, (task.progress / task.duration) * 100).toFixed(2))}%)
+              {Math.min(100, (task.progress / task.duration) * 100).toFixed(2)}
+              %)
               {getOvertime(task.duration, task.progress)}
             </span>
           </div>
@@ -152,7 +161,10 @@ export default function WeeklyGoals({}: Props): ReactElement {
           </Button>
         </div>
       </div>
-      <div className={classes.body}>{renderGoals()}</div>
+      <div className={classes.bodyRoot}>
+        <WeekSidebar />
+        <div className={classes.body}>{renderGoals()}</div>
+      </div>
     </div>
   );
 }

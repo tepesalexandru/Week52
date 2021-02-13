@@ -9,7 +9,6 @@ import { makeStyles } from "@material-ui/core";
 import { ApplicationState } from "../../../app/store";
 import { useSelector } from "react-redux";
 import SelectWithValidation from "../../../shared/SelectWithValidation";
-import useLookup from "../../../shared/hooks/useLookup";
 import { getGoalsForWeek } from "../Services/goalService";
 import { getTasksForGoal } from "../Services/lookupService";
 
