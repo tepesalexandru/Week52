@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Week52.DataAccess.Entities
 {
-    public class BasicGoal : BaseEntity
+    public class BasicDay : BaseEntity
     {
-        public BasicGoal()
+        public BasicDay()
         {
-            Tasks = new List<BasicTask>();
+            Overview = new List<BasicProgress>();
         }
-        public string Name { get; set; }
-        public virtual ICollection<BasicTask> Tasks { get; set; }
+        public int DayNumber { get; set; }
         [ForeignKey("Week")]
         public Guid WeekId { get; set; }
-        public BasicWeek Week { get; set; }
+        public BasicWeek Week{ get; set; }
+        public virtual ICollection<BasicProgress> Overview { get; set; }
     }
 }

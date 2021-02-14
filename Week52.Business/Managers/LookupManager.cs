@@ -10,7 +10,6 @@ namespace Week52.Business.Managers
 {
     public interface ILookupManager
     {
-        List<IdName> GetGoalsForWeek(int weekNumber);
         List<IdName> GetTasksForGoal(Guid GoalId);
     }
     public class LookupManager : ILookupManager
@@ -19,11 +18,6 @@ namespace Week52.Business.Managers
         public LookupManager(IGoalRepository goalRepository)
         {
             _goalRepository = goalRepository;
-        }
-        public List<IdName> GetGoalsForWeek(int weekNumber)
-        {
-            List<IdName> goals = _goalRepository.GetGoalsForWeek(weekNumber).Select(x => new IdName { Id = x.Id, Name = x.Name }).ToList();
-            return goals;
         }
 
         public List<IdName> GetTasksForGoal(Guid GoalId)

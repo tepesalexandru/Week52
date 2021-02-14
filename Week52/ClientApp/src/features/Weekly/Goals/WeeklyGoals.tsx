@@ -3,17 +3,16 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { ApplicationState } from "../../../app/store";
-import {
-  _fetchGoals,
-  Goal,
-  Task,
-  _deleteGoal,
-  _fetchGoalsForWeek,
-} from "../Slices/weeklyGoalsSlice";
 import { makeStyles } from "@material-ui/core";
 import { deleteGoal } from "../Services/goalService";
+import WeekSidebar from "./WeekSidebar";
+import { _fetchWeek } from "../Slices/weekSlice";
+import { Goal, Task, Week } from "../../../shared/Interfaces";
 
 const useStyles = makeStyles((theme) => ({
+  bodyRoot: {
+    display: "flex",
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -26,11 +25,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     padding: "16px 24px",
     background: theme.palette.secondary.main,
-    marginBottom: 36,
   },
   body: {
     width: "80%",
     margin: "auto",
+    marginTop: 36,
+    marginLeft: 30,
   },
   goalRoot: {
     background: theme.palette.secondary.main,
@@ -65,30 +65,26 @@ export default function WeeklyGoals({}: Props): ReactElement {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
-  const currentWeek = useSelector(
-    (state: ApplicationState) => state.metadata.currentWeek
+  const currentWeek: Week = useSelector(
+    (state: ApplicationState) => state.week
   );
-  const goals = useSelector((state: ApplicationState) => state.goals);
   const [totalMinutes, setTotalMinutes] = useState<number>(0);
   const [totalHours, setTotalHours] = useState<number>(0);
-  useEffect(() => {
-    dispatch(_fetchGoalsForWeek(currentWeek));
-  }, [currentWeek]);
 
   useEffect(() => {
     let neededMinutes = 0;
     let totalProgress = 0;
-    goals.map((goal: Goal) => {
+    currentWeek.goals.map((goal: Goal) => {
       goal.tasks.map((task: Task) => {
         neededMinutes += task.duration;
-        totalProgress += task.progress;
+        // totalProgress += task.progress;
       });
     });
     let remainingMinutes = neededMinutes - totalProgress;
     remainingMinutes = Math.max(0, remainingMinutes);
     setTotalMinutes(remainingMinutes);
     setTotalHours(+(remainingMinutes / 60).toFixed(2));
-  }, [JSON.stringify(goals)]);
+  }, [JSON.stringify(currentWeek.goals)]);
 
   const getOvertime = (initial: number, progress: number) => {
     if (progress > initial)
@@ -100,12 +96,13 @@ export default function WeeklyGoals({}: Props): ReactElement {
     return tasks.map((task) => {
       return (
         <div key={task.id} className={classes.taskRoot}>
-          <div className={classes.taskBody} style={{opacity: task.completed ? 0.4 : 1}}>
+          <div
+            className={classes.taskBody}
+            // style={{ opacity: task.completed ? 0.4 : 1 }}
+          >
             <span>{task.name}</span>
             <span>
-              {task.duration} minutes | {task.progress} minutes (
-              {(Math.min(100, (task.progress / task.duration) * 100).toFixed(2))}%)
-              {getOvertime(task.duration, task.progress)}
+              {task.duration} minutes
             </span>
           </div>
         </div>
@@ -114,7 +111,7 @@ export default function WeeklyGoals({}: Props): ReactElement {
   };
 
   const renderGoals = () => {
-    return goals.map((goal: Goal) => {
+    return currentWeek.goals.map((goal: Goal) => {
       return (
         <React.Fragment key={goal.id}>
           <div className={classes.goalRoot}>
@@ -152,7 +149,10 @@ export default function WeeklyGoals({}: Props): ReactElement {
           </Button>
         </div>
       </div>
-      <div className={classes.body}>{renderGoals()}</div>
+      <div className={classes.bodyRoot}>
+        <WeekSidebar />
+        <div className={classes.body}>{renderGoals()}</div>
+      </div>
     </div>
   );
 }

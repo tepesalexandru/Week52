@@ -1,13 +1,14 @@
 import { combineReducers } from "redux";
 import thunk from "redux-thunk";
 import { configureStore } from "@reduxjs/toolkit";
-import { Goal, Task, weeklyGoalsSlice } from "../features/Weekly/Slices/weeklyGoalsSlice";
 import { metadataSlice, MetadataState } from "../features/Weekly/Slices/metadataSlice";
+import { Goal, Week } from "../shared/Interfaces";
+import { weekSlice } from "../features/Weekly/Slices/weekSlice";
 
 // The top-level state object
 export interface ApplicationState {
   metadata: MetadataState,
-  goals: Goal[]
+  week: Week
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -15,7 +16,7 @@ export interface ApplicationState {
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
   metadata: metadataSlice.reducer,
-  goals: weeklyGoalsSlice.reducer
+  week: weekSlice.reducer
 };
 
 export function createReducerManager(initialReducers: any) {

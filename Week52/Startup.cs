@@ -39,9 +39,13 @@ namespace Week52
             });
             services.AddScoped(typeof(IGenericRepository), typeof(GenericRepository));
             services.AddScoped<IGoalRepository, GoalRepository>();
+            services.AddScoped<IWeekRepository, WeekRepository>();
+
+
             services.AddScoped<ITaskManager, TaskManager>();
             services.AddScoped<IGoalManager, GoalManager>();
             services.AddScoped<ILookupManager, LookupManager>();
+            services.AddScoped<IWeekManager, WeekManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

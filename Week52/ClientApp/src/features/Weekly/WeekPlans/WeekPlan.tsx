@@ -3,16 +3,10 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { ApplicationState } from "../../../app/store";
-import {
-  _fetchGoals,
-  Goal,
-  Task,
-  _deleteGoal,
-  _fetchGoalsForWeek,
-  _deleteTask,
-} from "../Slices/weeklyGoalsSlice";
 import { makeStyles } from "@material-ui/core";
 import { deleteGoal } from "../Services/goalService";
+import { Goal, Task } from "../../../shared/Interfaces";
+import { _deleteGoal, _deleteTask, _fetchWeek } from "../Slices/weekSlice";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -70,11 +64,12 @@ export default function WeekPlan({}: Props): ReactElement {
   const weekNumber = useSelector(
     (state: ApplicationState) => state.metadata.weekSelected
   );
-  const goals = useSelector((state: ApplicationState) => state.goals);
+  const goals = useSelector((state: ApplicationState) => state.week.goals);
   const [totalMinutes, setTotalMinutes] = useState<number>(0);
   const [totalHours, setTotalHours] = useState<number>(0);
   useEffect(() => {
-    dispatch(_fetchGoalsForWeek(weekNumber || params.weekNumber));
+    // dispatch(_fetchGoalsForWeek(weekNumber || params.weekNumber));
+    dispatch(_fetchWeek(weekNumber || params.weekNumber));
   }, []);
 
   useEffect(() => {

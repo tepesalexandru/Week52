@@ -12,10 +12,8 @@ namespace Week52.DataAccess.Repositories
     public interface IGoalRepository
     {
         IEnumerable<BasicGoal> GetGoals();
-        IEnumerable<BasicGoal> GetGoalsForWeek(int weekNumber);
-        BasicGoal CreateGoal(BasicGoal goal);
+        BasicGoal CreateGoal(int WeekNumber, BasicGoal goal);
         BasicTask AddTask(Guid GoalId, BasicTask task);
-        Guid AddTaskProgress(Guid TaskId, int minutes);
         Guid DeleteGoal(BasicGoal goal);
         Guid DeleteTask(BasicTask task);
     }
@@ -27,10 +25,12 @@ namespace Week52.DataAccess.Repositories
             _dbContext = dbContext;
         }
 
-        public BasicGoal CreateGoal(BasicGoal goal)
+        public BasicGoal CreateGoal(int WeekNumber, BasicGoal goal)
         {
-            _dbContext.Goals.Add(goal);
+            var week = _dbContext.Weeks.Include(x => x.Goals).FirstOrDefault(x => x.WeekNumber == WeekNumber);
+            week.Goals.Add(goal);
             _dbContext.SaveChanges();
+
             return goal;
         }
 
@@ -61,21 +61,6 @@ namespace Week52.DataAccess.Repositories
         {
             var goals = _dbContext.Goals.Include(x => x.Tasks).ToList();
             return goals;
-        }
-
-        public IEnumerable<BasicGoal> GetGoalsForWeek(int weekNumber)
-        {
-            var goals = _dbContext.Goals.Where(x => x.WeekNumber == weekNumber).Include(x => x.Tasks).ToList();
-            return goals;
-        }
-
-        public Guid AddTaskProgress(Guid TaskId, int minutes)
-        {
-            var task = _dbContext.Tasks.FirstOrDefault(x => x.Id == TaskId);
-            task.Progress += minutes;
-            if (task.Progress >= task.Duration) task.Completed = true;
-            _dbContext.SaveChanges();
-            return task.Id;
         }
     }
 
