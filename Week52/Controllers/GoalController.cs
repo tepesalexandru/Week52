@@ -27,10 +27,10 @@ namespace Week52.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
-        public IActionResult CreateGoal(BasicGoal goal)
+        [Route("create/{WeekNumber}")]
+        public IActionResult CreateGoal(int WeekNumber, BasicGoal goal)
         {
-            _goalManager.CreateGoal(goal);
+            _goalManager.CreateGoal(WeekNumber, goal);
             return Ok();
         }
 

@@ -3,14 +3,14 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory, useParams } from "react-router";
 import InputWithValidation from "../../../shared/InputWithValidation";
-import { addTaskProgress, createTask } from "../Services/taskService";
-import { Task } from "../Slices/weeklyGoalsSlice";
+import { createTask } from "../Services/taskService";
 import { makeStyles } from "@material-ui/core";
 import { ApplicationState } from "../../../app/store";
 import { useSelector } from "react-redux";
 import SelectWithValidation from "../../../shared/SelectWithValidation";
-import { getGoalsForWeek } from "../Services/goalService";
 import { getTasksForGoal } from "../Services/lookupService";
+import { Goal, Task, Week } from "../../../shared/Interfaces";
+import { addProgress, getWeek } from "../Services/weekService";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,17 +44,17 @@ export default function AddProgress({}: Props): ReactElement {
   const currentWeek = useSelector(
     (state: ApplicationState) => state.metadata.currentWeek
   );
-  const [goals, setGoals] = useState([]);
+  const [goals, setGoals] = useState<Goal[]>([]);
   const [tasks, setTasks] = useState([]);
   const classes = useStyles();
   const onSubmit = (formValues: { taskId: string; minutes: number }) => {
-    addTaskProgress(formValues.taskId, formValues.minutes).then(history.goBack);
+    // addProgress(formValues.taskId, formValues.minutes).then(history.goBack);
   };
 
   useEffect(() => {
     const fetchGoals = async () => {
-      const fetchedGoals = await getGoalsForWeek(currentWeek);
-      setGoals(fetchedGoals);
+      const week: Week = await getWeek(currentWeek);
+      setGoals(week.goals);
     };
     fetchGoals();
   }, [currentWeek]);

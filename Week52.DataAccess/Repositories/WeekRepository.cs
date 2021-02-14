@@ -24,7 +24,12 @@ namespace Week52.DataAccess.Repositories
 
         public BasicWeek GetWeek(int weekNumber)
         {
-            var week = _dbContext.Weeks.Include(x => x.Goals).Include(x => x.Days).FirstOrDefault(x => x.WeekNumber == weekNumber);
+            var week = _dbContext.Weeks
+                .Include(x => x.Goals)
+                .ThenInclude(x => x.Tasks)
+                .Include(x => x.Days)
+                .ThenInclude(x => x.Overview)
+                .FirstOrDefault(x => x.WeekNumber == weekNumber);
             if (week == null)
             {
                 var newWeek = new BasicWeek();
@@ -52,6 +57,7 @@ namespace Week52.DataAccess.Repositories
                 .FirstOrDefault(x => x.Id == DayId);
 
             day.Overview.Add(progress);
+            _dbContext.SaveChanges();
             return progress;
         }
 

@@ -7,6 +7,7 @@ import { makeStyles } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { getWeekNumber } from "../features/Helpers";
 import { setCurrentWeek } from "../features/Weekly/Slices/metadataSlice";
+import { _fetchWeek } from "../features/Weekly/Slices/weekSlice";
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
@@ -20,7 +21,10 @@ export default () => {
 
   useEffect(() => {
     const currentWeek = getWeekNumber(new Date());
-    dispatch(setCurrentWeek(currentWeek));
+    if (currentWeek != 0) {
+      dispatch(_fetchWeek(currentWeek));
+      dispatch(setCurrentWeek(currentWeek));
+    }
   }, []);
 
   return (
