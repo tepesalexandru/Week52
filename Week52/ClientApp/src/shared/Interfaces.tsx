@@ -25,7 +25,7 @@ export interface Task {
 }
 
 export interface Progress {
-  id: string;
+  id?: string;
   goalId: string;
   taskId: string;
   progress: number;

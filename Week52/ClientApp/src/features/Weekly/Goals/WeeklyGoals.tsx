@@ -1,13 +1,15 @@
 import { Button } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router";
+import { Route, useHistory } from "react-router";
 import { ApplicationState } from "../../../app/store";
 import { makeStyles } from "@material-ui/core";
 import { deleteGoal } from "../Services/goalService";
 import WeekSidebar from "./WeekSidebar";
 import { _fetchWeek } from "../Slices/weekSlice";
 import { Goal, Task, Week } from "../../../shared/Interfaces";
+import DayOverview from "./DayOverview";
+import WeekReport from "./WeekReport";
 
 const useStyles = makeStyles((theme) => ({
   bodyRoot: {
@@ -26,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "16px 24px",
     background: theme.palette.secondary.main,
   },
-  body: {
+  view: {
     width: "80%",
     margin: "auto",
     marginTop: 36,
@@ -101,9 +103,7 @@ export default function WeeklyGoals({}: Props): ReactElement {
             // style={{ opacity: task.completed ? 0.4 : 1 }}
           >
             <span>{task.name}</span>
-            <span>
-              {task.duration} minutes
-            </span>
+            <span>{task.duration} minutes</span>
           </div>
         </div>
       );
@@ -139,19 +139,29 @@ export default function WeeklyGoals({}: Props): ReactElement {
           >
             Year Overview
           </Button>
-          <Button
+          {/* <Button
             variant="contained"
             color="primary"
             onClick={() => history.push(`/add-progress`)}
             style={{ marginLeft: 16 }}
           >
             Add Progress
-          </Button>
+          </Button> */}
         </div>
       </div>
       <div className={classes.bodyRoot}>
         <WeekSidebar />
-        <div className={classes.body}>{renderGoals()}</div>
+        <div className={classes.view}>
+          <Route path="/week/overview">
+            <div>{renderGoals()}</div>
+          </Route>
+          <Route path="/week/day/:dayNumber">
+            <DayOverview week={currentWeek}/>
+          </Route>
+          <Route path="/week/report">
+            <WeekReport week={currentWeek} totalMinutes={totalMinutes}/>
+          </Route>
+        </div>
       </div>
     </div>
   );

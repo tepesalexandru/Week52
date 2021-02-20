@@ -4,12 +4,12 @@ import CreateGoal from "../../features/Weekly/WeekPlans/CreateGoal";
 import YearOverview from "../../features/Weekly/WeekPlans/YearOverview";
 import WeekPlan from "../../features/Weekly/WeekPlans/WeekPlan";
 import AddProgress from "../../features/Weekly/Goals/AddProgress";
+import DayOverview from "../../features/Weekly/Goals/DayOverview";
 
 export const routes = [
   {
-    path: "/",
+    path: "/week",
     component: WeeklyGoals,
-    exact: true,
   },
   {
     path: "/create-task/:id",
@@ -31,4 +31,8 @@ export const routes = [
     path: "/add-progress",
     component: AddProgress,
   },
+  // {
+  //   path: "/week/day/:dayNumber",
+  //   component: DayOverview,
+  // },
 ];
