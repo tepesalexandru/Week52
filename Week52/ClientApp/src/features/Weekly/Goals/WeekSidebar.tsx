@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setDayIdSelected } from "../Slices/metadataSlice";
 import { ApplicationState } from "../../../app/store";
 import { Day } from "../../../shared/Interfaces";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 300,
+    height: "calc(100vh - 68px)",
     backgroundColor: "#1e1e1e",
     color: "#dddddd",
   },
@@ -40,21 +42,39 @@ interface Props {}
 export default function WeekSidebar({}: Props): ReactElement {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
   const [selectedMenuItem, setSelectedMenuItem] = useState(null);
   const days = useSelector((state: ApplicationState) => state.week.days);
 
-  const selectDay = (ref: any, dayId: string) => {
+  const selectDay = (ref: any, dayId: string, dayNumber: number) => {
     setSelectedMenuItem(ref);
     dispatch(setDayIdSelected(dayId));
+    history.push(`/week/day/${dayNumber}`)
   };
+
+  const selectOverview = (ref: any) => {
+    setSelectedMenuItem(ref);
+    history.push("/week/overview")
+  }
+
+  const selectReport = (ref: any) => {
+    setSelectedMenuItem(ref);
+    history.push("/week/report")
+  }
+
+  const selectRetrospectives = (ref: any) => {
+    setSelectedMenuItem(ref);
+    history.push("/week/retrospectives")
+  }
 
   const renderDays = () => {
     return days.map((day: Day) => {
       return (
         <SidebarItem
           key={day.id}
-          onClick={(ref: any) => selectDay(ref, day.id)}
+          onClick={(ref: any) => selectDay(ref, day.id, day.dayNumber)}
           label={`Day ${day.dayNumber}`}
+          selectedItem={selectedMenuItem}
         />
       );
     });
@@ -73,17 +93,17 @@ export default function WeekSidebar({}: Props): ReactElement {
         <SidebarItem
           label={`Week Overview`}
           selectedItem={selectedMenuItem}
-          onClick={setSelectedMenuItem}
+          onClick={selectOverview}
         />
         <SidebarItem
           label={`Week Report`}
           selectedItem={selectedMenuItem}
-          onClick={setSelectedMenuItem}
+          onClick={selectReport}
         />
         <SidebarItem
           label={`Retrospectives`}
           selectedItem={selectedMenuItem}
-          onClick={setSelectedMenuItem}
+          onClick={selectRetrospectives}
         />
       </div>
     </div>

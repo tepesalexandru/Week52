@@ -6,11 +6,12 @@ import InputWithValidation from "../../../shared/InputWithValidation";
 import { createTask } from "../Services/taskService";
 import { makeStyles } from "@material-ui/core";
 import { ApplicationState } from "../../../app/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SelectWithValidation from "../../../shared/SelectWithValidation";
 import { getTasksForGoal } from "../Services/lookupService";
-import { Goal, Task, Week } from "../../../shared/Interfaces";
+import { Day, Goal, Progress, Task, Week } from "../../../shared/Interfaces";
 import { addProgress, getWeek } from "../Services/weekService";
+import { _addProgress } from "../Slices/weekSlice";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     background: theme.palette.secondary.main,
-    width: "80%",
     margin: "auto",
     padding: "36px 48px",
     borderRadius: 12,
@@ -36,35 +36,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props {}
+interface Props {
+  daySelected: Day,
+  goals: Goal[],
+  onClick?: any;
+}
 
-export default function AddProgress({}: Props): ReactElement {
+export default function AddProgress(props: Props): ReactElement {
   const history = useHistory();
+  const dispatch = useDispatch();
   const formHook = useForm<Task>();
   const currentWeek = useSelector(
     (state: ApplicationState) => state.metadata.currentWeek
   );
-  const [goals, setGoals] = useState<Goal[]>([]);
+  const [goals, setGoals] = useState<Goal[]>(props.goals);
   const [tasks, setTasks] = useState([]);
   const classes = useStyles();
-  const onSubmit = (formValues: { taskId: string; minutes: number }) => {
-    // addProgress(formValues.taskId, formValues.minutes).then(history.goBack);
+  const onSubmit = (formValues: Progress) => {
+    dispatch(_addProgress({dayId: props.daySelected.id, progress:{
+      taskId: formValues.taskId,
+      goalId: formValues.goalId,
+      progress: +formValues.progress
+    }}));
+    props.onClick();
   };
 
   useEffect(() => {
-    const fetchGoals = async () => {
-      const week: Week = await getWeek(currentWeek);
-      setGoals(week.goals);
-    };
-    fetchGoals();
-  }, [currentWeek]);
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      const fetchedTasks = await getTasksForGoal(formHook.getValues("goalId"));
-      setTasks(fetchedTasks);
-    };
-    fetchTasks();
+    const goalId = formHook.getValues('goalId');
+    const foundGoal: any =  props.goals.find(x => x.id === goalId);
+    if (foundGoal != null) {
+      setTasks(foundGoal.tasks);
+    }
   }, [formHook.watch("goalId")]);
 
   return (
@@ -87,7 +89,8 @@ export default function AddProgress({}: Props): ReactElement {
           />
           <InputWithValidation
             formHook={formHook}
-            name="minutes"
+            name="progress"
+            label="Minutes"
             type="number"
           />
         </div>
@@ -96,7 +99,7 @@ export default function AddProgress({}: Props): ReactElement {
           variant="contained"
           onClick={formHook.handleSubmit(onSubmit)}
         >
-          Add
+          Confirm
         </Button>
       </div>
     </div>

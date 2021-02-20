@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { Task, Week } from "../../../shared/Interfaces";
+import { Progress, Task, Week } from "../../../shared/Interfaces";
 import { deleteGoal } from "../Services/goalService";
 import { deleteTask } from "../Services/taskService";
-import { getWeek } from "../Services/weekService";
+import { addProgress, getWeek } from "../Services/weekService";
 
 const INITIAL_STATE: Week = {
   id: "",
@@ -28,6 +28,20 @@ export const _deleteTask = createAsyncThunk(
   }
 );
 
+export const _addProgress = createAsyncThunk(
+  "week/addProgress",
+    (args: {
+      dayId: string,
+      progress: Progress
+    }) => {
+    addProgress(args.dayId, args.progress);
+    return {
+      dayId: args.dayId,
+      progress: args.progress
+    }
+  }
+);
+
 export const weekSlice = createSlice({
   name: "week",
   initialState: INITIAL_STATE,
@@ -41,6 +55,11 @@ export const weekSlice = createSlice({
     });
     builder.addCase(_deleteGoal.fulfilled, (state: Week, action) => {
       state.goals = state.goals.filter((goal) => goal.id !== action.payload);
+      return state;
+    });
+    builder.addCase(_addProgress.fulfilled, (state: Week, action) => {
+      const dayIndex = state.days.findIndex(x => x.id === action.payload.dayId);
+      state.days[dayIndex].overview.push(action.payload.progress);
       return state;
     });
     builder.addCase(_deleteTask.fulfilled, (state: Week, action) => {
