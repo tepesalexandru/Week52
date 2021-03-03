@@ -20,11 +20,12 @@ namespace Week52.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("get/{WeekNumber}")]
-        public IActionResult GetWeek(int WeekNumber)
+        [Route("get/{UserId}/{WeekNumber}")]
+        public IActionResult GetWeek(Guid UserId, int WeekNumber)
         {
-            return Ok(_weekManager.GetWeek(WeekNumber));
+            return Ok(_weekManager.GetWeek(UserId, WeekNumber));
         }
+
 
         [HttpPatch]
         [Route("addProgress/{DayId}")]

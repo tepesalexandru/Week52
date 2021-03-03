@@ -40,12 +40,13 @@ namespace Week52
             services.AddScoped(typeof(IGenericRepository), typeof(GenericRepository));
             services.AddScoped<IGoalRepository, GoalRepository>();
             services.AddScoped<IWeekRepository, WeekRepository>();
-
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<ITaskManager, TaskManager>();
             services.AddScoped<IGoalManager, GoalManager>();
             services.AddScoped<ILookupManager, LookupManager>();
             services.AddScoped<IWeekManager, WeekManager>();
+            services.AddScoped<IUserManager, UserManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,7 +80,7 @@ namespace Week52
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                    pattern: "{controller}/{action=Index}/{param1?}/{param2?}");
             });
 
             app.UseSpa(spa =>
