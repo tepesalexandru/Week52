@@ -9,5 +9,6 @@ namespace Week52.DataAccess.Entities
     public class BaseEntity
     {
         public Guid Id { get; set; }
+        public Guid UserId { get; set; }
     }
 }

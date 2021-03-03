@@ -56,7 +56,6 @@ namespace Week52.DataAccess.Repositories
                 return null;
             }
             DbSet<T> entities = _dbContext.Set<T>();
-
             entities.Add(entity);
             _dbContext.SaveChanges();
             return entity;

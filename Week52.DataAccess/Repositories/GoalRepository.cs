@@ -12,6 +12,7 @@ namespace Week52.DataAccess.Repositories
     public interface IGoalRepository
     {
         IEnumerable<BasicGoal> GetGoals();
+        IEnumerable<BasicGoal> GetGoalsByUserId(Guid UserId);
         BasicGoal CreateGoal(int WeekNumber, BasicGoal goal);
         BasicTask AddTask(Guid GoalId, BasicTask task);
         Guid DeleteGoal(BasicGoal goal);
@@ -60,6 +61,12 @@ namespace Week52.DataAccess.Repositories
         public IEnumerable<BasicGoal> GetGoals()
         {
             var goals = _dbContext.Goals.Include(x => x.Tasks).ToList();
+            return goals;
+        }
+
+        public IEnumerable<BasicGoal> GetGoalsByUserId(Guid UserId)
+        {
+            var goals = _dbContext.Goals.Include(x => x.Tasks).Where(x => x.UserId == UserId).ToList();
             return goals;
         }
     }
