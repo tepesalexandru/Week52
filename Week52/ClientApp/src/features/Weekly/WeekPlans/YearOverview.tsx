@@ -49,7 +49,8 @@ export default function YearOverview({}: Props): ReactElement {
             variant="contained"
             className={classes.week}
             onClick={() => {
-              dispatch(setSelectedWeek(i + 1))
+              // set id as well
+              dispatch(setSelectedWeek({ weekSelected: i + 1, weekId: "" }));
               history.push(`/week-plan/${i + 1}`);
             }}
           >
@@ -69,7 +70,7 @@ export default function YearOverview({}: Props): ReactElement {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => history.push("/")}
+            onClick={() => history.push("/week")}
           >
             Current Week
           </Button>

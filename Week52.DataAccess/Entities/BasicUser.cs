@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Week52.DataAccess.Entities
 {
-    public class BaseEntity
+    public class BasicUser : BaseEntity
     {
-        public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public string Name { get; set; }
     }
 }

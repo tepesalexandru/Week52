@@ -16,6 +16,7 @@ export interface Goal {
   name: string;
   weekNumber?: number;
   tasks: Task[];
+  userId?: string;
 }
 
 export interface Task {
@@ -29,4 +30,9 @@ export interface Progress {
   goalId: string;
   taskId: string;
   progress: number;
+}
+
+export interface User {
+  id: string;
+  name: string;
 }

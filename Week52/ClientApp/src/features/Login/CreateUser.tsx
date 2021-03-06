@@ -1,13 +1,12 @@
-import { Button, TextField } from "@material-ui/core";
 import React, { ReactElement } from "react";
+import { Button, makeStyles } from "@material-ui/core";
+import InputWithValidation from "../../shared/InputWithValidation";
 import { useForm } from "react-hook-form";
+import { createUser } from "./userService";
+import { User } from "../../shared/Interfaces";
 import { useHistory } from "react-router";
-import InputWithValidation from "../../../shared/InputWithValidation";
-import { makeStyles } from "@material-ui/core";
-import { createGoal } from "../Services/goalService";
-import { useSelector } from "react-redux";
-import { ApplicationState } from "../../../app/store";
-import { Goal } from "../../../shared/Interfaces";
+
+interface Props {}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     background: theme.palette.secondary.main,
     width: "80%",
-    margin: 'auto',
+    margin: "auto",
     padding: "36px 48px",
     borderRadius: 12,
   },
@@ -30,22 +29,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props {}
-
-export default function CreateGoal({}: Props): ReactElement {
-  const history = useHistory();
-  const formHook = useForm<Goal>();
+export default function CreateUser({}: Props): ReactElement {
   const classes = useStyles();
-  const weekNumber = useSelector((state: ApplicationState) => state.metadata.weekSelected);
-  const userId = useSelector((state: ApplicationState) => state.metadata.userId);
-  const onSubmit = (formValues: Goal) => {
-    createGoal(weekNumber, {...formValues, userId: userId}).then(history.goBack);
-  };
+  const formHook = useForm<User>();
+  const history = useHistory();
+
+  const onSubmit = (formValues: User) => {
+    console.log(formValues);
+    createUser(formValues.name).then(history.goBack);
+  } 
 
   return (
     <div className={classes.root}>
       <div className={classes.container}>
-        <p className={classes.title}>Create a goal</p>
+        <p className={classes.title}>Create a user</p>
         <div className={classes.inputsContainer}>
           <InputWithValidation
             formHook={formHook}

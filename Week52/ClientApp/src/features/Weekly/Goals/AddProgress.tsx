@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-  daySelected: Day,
-  goals: Goal[],
+  daySelected: Day;
+  goals: Goal[];
   onClick?: any;
 }
 
@@ -53,17 +53,22 @@ export default function AddProgress(props: Props): ReactElement {
   const [tasks, setTasks] = useState([]);
   const classes = useStyles();
   const onSubmit = (formValues: Progress) => {
-    dispatch(_addProgress({dayId: props.daySelected.id, progress:{
-      taskId: formValues.taskId,
-      goalId: formValues.goalId,
-      progress: +formValues.progress
-    }}));
+    dispatch(
+      _addProgress({
+        dayId: props.daySelected.id,
+        progress: {
+          taskId: formValues.taskId,
+          goalId: formValues.goalId,
+          progress: +formValues.progress,
+        },
+      })
+    );
     props.onClick();
   };
 
   useEffect(() => {
-    const goalId = formHook.getValues('goalId');
-    const foundGoal: any =  props.goals.find(x => x.id === goalId);
+    const goalId = formHook.getValues("goalId");
+    const foundGoal: any = props.goals.find((x) => x.id === goalId);
     if (foundGoal != null) {
       setTasks(foundGoal.tasks);
     }
@@ -80,18 +85,21 @@ export default function AddProgress(props: Props): ReactElement {
             label="goal"
             values={goals}
             defaultValue={""}
+            validation={{ required: true }}
           />
           <SelectWithValidation
             formHook={formHook}
             name="taskId"
             label="task"
             values={tasks}
+            validation={{ required: true }}
           />
           <InputWithValidation
             formHook={formHook}
             name="progress"
             label="Minutes"
             type="number"
+            validation={{ required: true }}
           />
         </div>
         <Button
