@@ -1,4 +1,4 @@
-import { Button, TextField } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import React, { ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router";
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     background: theme.palette.secondary.main,
     width: "80%",
-    margin: 'auto',
+    margin: "auto",
     padding: "36px 48px",
     borderRadius: 12,
   },
@@ -36,10 +36,16 @@ export default function CreateGoal({}: Props): ReactElement {
   const history = useHistory();
   const formHook = useForm<Goal>();
   const classes = useStyles();
-  const weekNumber = useSelector((state: ApplicationState) => state.metadata.weekSelected);
-  const userId = useSelector((state: ApplicationState) => state.metadata.userId);
+  const weekNumber = useSelector(
+    (state: ApplicationState) => state.metadata.weekSelected
+  );
+  const userId = useSelector(
+    (state: ApplicationState) => state.metadata.userId
+  );
   const onSubmit = (formValues: Goal) => {
-    createGoal(weekNumber, {...formValues, userId: userId}).then(history.goBack);
+    createGoal(weekNumber, { ...formValues, userId: userId }).then(
+      history.goBack
+    );
   };
 
   return (

@@ -1,16 +1,13 @@
-import { Button, TextField } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useHistory, useParams } from "react-router";
+import { useHistory } from "react-router";
 import InputWithValidation from "../../../shared/InputWithValidation";
-import { createTask } from "../Services/taskService";
 import { makeStyles } from "@material-ui/core";
 import { ApplicationState } from "../../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import SelectWithValidation from "../../../shared/SelectWithValidation";
-import { getTasksForGoal } from "../Services/lookupService";
 import { Day, Goal, Progress, Task, Week } from "../../../shared/Interfaces";
-import { addProgress, getWeek } from "../Services/weekService";
 import { _addProgress } from "../Slices/weekSlice";
 
 const useStyles = makeStyles((theme) => ({
@@ -43,12 +40,8 @@ interface Props {
 }
 
 export default function AddProgress(props: Props): ReactElement {
-  const history = useHistory();
   const dispatch = useDispatch();
   const formHook = useForm<Task>();
-  const currentWeek = useSelector(
-    (state: ApplicationState) => state.metadata.currentWeek
-  );
   const [goals, setGoals] = useState<Goal[]>(props.goals);
   const [tasks, setTasks] = useState([]);
   const classes = useStyles();

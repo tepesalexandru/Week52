@@ -1,10 +1,5 @@
-import * as React from 'react';
-import { Container } from 'reactstrap';
+import * as React from "react";
 
 export default (props: { children?: React.ReactNode }) => (
-    <React.Fragment>
-        {/* <Container> */}
-            {props.children}
-        {/* </Container> */}
-    </React.Fragment>
+  <React.Fragment>{props.children}</React.Fragment>
 );

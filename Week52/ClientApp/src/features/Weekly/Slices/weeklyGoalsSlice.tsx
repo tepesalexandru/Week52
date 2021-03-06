@@ -5,12 +5,6 @@ import { deleteTask } from "../Services/taskService";
 
 const INITIAL_STATE: Goal[] = [];
 
-// export const _fetchTasks = createAsyncThunk("weeklyGoals/getTasks", () =>
-//   getTasks()
-// );
-// export const _fetchGoals = createAsyncThunk("weeklyGoals/getGoals", () =>
-//   getGoals()
-// );
 export const _deleteGoal = createAsyncThunk(
   "weeklyGoals/deleteGoal",
   (id: string) => {
@@ -23,24 +17,12 @@ export const _deleteTask = createAsyncThunk(
     return deleteTask(id);
   }
 );
-// export const _fetchGoalsForWeek = createAsyncThunk(
-//   "weeklyGoals/getGoalsForWeek",
-//   (weekNumber: number) => getGoalsForWeek(weekNumber)
-// );
 
 export const weeklyGoalsSlice = createSlice({
   name: "weeklyGoals",
   initialState: INITIAL_STATE,
   reducers: {},
   extraReducers: (builder) => {
-    // builder.addCase(_fetchGoals.fulfilled, (state: Goal[], action) => {
-    //   state = action.payload;
-    //   return state;
-    // });
-    // builder.addCase(_fetchGoalsForWeek.fulfilled, (state: Goal[], action) => {
-    //   state = action.payload;
-    //   return state;
-    // });
     builder.addCase(_deleteGoal.fulfilled, (state: Goal[], action) => {
       state = state.filter((goal) => goal.id !== action.payload);
       return state;

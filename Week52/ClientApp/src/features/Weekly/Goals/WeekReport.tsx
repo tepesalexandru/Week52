@@ -10,13 +10,9 @@ import {
   Theme,
   withStyles,
 } from "@material-ui/core";
-import React, { ReactElement, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { ReactElement } from "react";
 import { useParams } from "react-router";
-import { ApplicationState } from "../../../app/store";
 import { Day, Goal, Progress, Task, Week } from "../../../shared/Interfaces";
-import { makeStyles } from "@material-ui/core";
-import { totalmem } from "os";
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -40,32 +36,6 @@ const StyledTableRow = withStyles((theme: Theme) =>
   })
 )(TableRow);
 
-const useStyles = makeStyles((theme) => ({
-  singleProgressRoot: {
-    display: "flex",
-  },
-  progressPieceContainer: {
-    backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText,
-    padding: "8px 50px",
-    borderRadius: 12,
-    margin: "4px 2px",
-  },
-  arrowContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: 50,
-    "& svg": {
-      height: 45,
-      width: 45,
-    },
-  },
-  editModeContainer: {
-    marginBottom: 20,
-  },
-}));
-
 interface Props {
   week: Week;
   totalMinutes: number;
@@ -73,7 +43,6 @@ interface Props {
 
 export default function WeekReport(props: Props): ReactElement {
   const params: any = useParams();
-  const classes = useStyles();
   const dayNumber = params.dayNumber;
 
   const getTaskById = (taskId: string, progress?: Progress): Task => {

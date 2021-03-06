@@ -26,7 +26,10 @@ export const metadataSlice = createSlice({
       state.userId = action.payload.userId;
       state.userName = action.payload.userName;
     },
-    setSelectedWeek: (state, action: {payload: {weekSelected: number, weekId: string}}) => {
+    setSelectedWeek: (
+      state,
+      action: { payload: { weekSelected: number; weekId: string } }
+    ) => {
       state.weekSelected = action.payload.weekSelected;
       state.weekId = action.payload.weekId;
     },
