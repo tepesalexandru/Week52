@@ -11,43 +11,32 @@ const INITIAL_STATE: Week = {
   goals: [],
 };
 
-export const _fetchWeek = createAsyncThunk("week/get", (weekNumber: number) =>
-  getWeek(weekNumber)
+export const _fetchWeek = createAsyncThunk("week/get", (info: any) =>
+  getWeek(info.userId, info.weekNumber)
 );
 
-export const _deleteGoal = createAsyncThunk(
-  "week/deleteGoal",
-  (id: string) => {
-    return deleteGoal(id);
-  }
-);
-export const _deleteTask = createAsyncThunk(
-  "week/deleteTask",
-  (id: string) => {
-    return deleteTask(id);
-  }
-);
+export const _deleteGoal = createAsyncThunk("week/deleteGoal", (id: string) => {
+  return deleteGoal(id);
+});
+export const _deleteTask = createAsyncThunk("week/deleteTask", (id: string) => {
+  return deleteTask(id);
+});
 
 export const _addProgress = createAsyncThunk(
   "week/addProgress",
-    (args: {
-      dayId: string,
-      progress: Progress
-    }) => {
+  (args: { dayId: string; progress: Progress }) => {
     addProgress(args.dayId, args.progress);
     return {
       dayId: args.dayId,
-      progress: args.progress
-    }
+      progress: args.progress,
+    };
   }
 );
 
 export const weekSlice = createSlice({
   name: "week",
   initialState: INITIAL_STATE,
-  reducers: {
-    
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(_fetchWeek.fulfilled, (state: Week, action) => {
       state = action.payload;
@@ -58,7 +47,9 @@ export const weekSlice = createSlice({
       return state;
     });
     builder.addCase(_addProgress.fulfilled, (state: Week, action) => {
-      const dayIndex = state.days.findIndex(x => x.id === action.payload.dayId);
+      const dayIndex = state.days.findIndex(
+        (x) => x.id === action.payload.dayId
+      );
       state.days[dayIndex].overview.push(action.payload.progress);
       return state;
     });

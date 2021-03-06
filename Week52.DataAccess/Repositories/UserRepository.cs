@@ -10,6 +10,7 @@ namespace Week52.DataAccess.Repositories
 {
     public interface IUserRepository
     {
+        public List<BasicUser> GetUsers();
         public BasicUser CreateUser(string Name);
     }
     public class UserRepository : IUserRepository
@@ -26,6 +27,12 @@ namespace Week52.DataAccess.Repositories
             _context.Users.Add(newUser);
             _context.SaveChanges();
             return newUser;
+        }
+
+        public List<BasicUser> GetUsers()
+        {
+            var users = _context.Users.ToList();
+            return users;
         }
     }
 

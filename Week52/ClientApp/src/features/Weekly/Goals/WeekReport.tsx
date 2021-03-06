@@ -186,14 +186,13 @@ export default function WeekReport(props: Props): ReactElement {
                   {getDayProgress(day.dayNumber - 1)} minutes
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {Math.max(
-                    +(((props.totalMinutes -
+                  {(
+                    ((props.totalMinutes -
                       getPreviousDaysProgress(day.dayNumber - 1) -
                       getDayProgress(day.dayNumber - 1)) /
                       props.totalMinutes) *
-                      100,
-                    0).toFixed(2)
-                  )}
+                    100
+                  ).toFixed(2)}
                   %
                 </StyledTableCell>
               </StyledTableRow>

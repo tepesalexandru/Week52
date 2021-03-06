@@ -28,7 +28,7 @@ namespace Week52.DataAccess.Repositories
 
         public BasicGoal CreateGoal(int WeekNumber, BasicGoal goal)
         {
-            var week = _dbContext.Weeks.Include(x => x.Goals).FirstOrDefault(x => x.WeekNumber == WeekNumber);
+            var week = _dbContext.Weeks.Include(x => x.Goals).FirstOrDefault(x => x.WeekNumber == WeekNumber && x.UserId == goal.UserId);
             week.Goals.Add(goal);
             _dbContext.SaveChanges();
 

@@ -6,11 +6,17 @@ import WeekPlan from "../../features/Weekly/WeekPlans/WeekPlan";
 import AddProgress from "../../features/Weekly/Goals/AddProgress";
 import DayOverview from "../../features/Weekly/Goals/DayOverview";
 import Landing from "../../features/Login/Landing";
+import CreateUser from "../../features/Login/CreateUser";
 
 export const routes = [
   {
     path: "/",
     component: Landing,
+    exact: true
+  },
+  {
+    path: "/create-user",
+    component: CreateUser,
     exact: true
   },
   {

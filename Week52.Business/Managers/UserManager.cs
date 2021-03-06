@@ -10,6 +10,7 @@ namespace Week52.Business.Managers
 {
     public interface IUserManager
     {
+        public List<BasicUser> GetUsers();
         public BasicUser CreateUser(string Name);
         public void InitializeUser(Guid UserId);
     }
@@ -29,9 +30,14 @@ namespace Week52.Business.Managers
             return user;
         }
 
+        public List<BasicUser> GetUsers()
+        {
+            return _userRepository.GetUsers();
+        }
+
         public void InitializeUser(Guid UserId)
         {
-            for (int i = 1; i <= 52; i++)
+            for (int i = 0; i < 52; i++)
             {
                 _weekRepository.CreateWeek(i, UserId);
             }
