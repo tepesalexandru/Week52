@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
-import './index.css'
+import "./index.css";
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -12,18 +12,18 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#bb86fc',
-      contrastText: '#121212'
+      main: "#bb86fc",
+      contrastText: "#121212",
     },
     background: {
-      default: '#121212'
+      default: "#121212",
     },
     secondary: {
-      main: '#1e1e1e',
-      contrastText: '#dddddd'
-    }
-  }
-})
+      main: "#1e1e1e",
+      contrastText: "#dddddd",
+    },
+  },
+});
 
 // Create browser history to use in the Redux store
 const baseUrl = document

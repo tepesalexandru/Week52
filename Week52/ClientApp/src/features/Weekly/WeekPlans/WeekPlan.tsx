@@ -71,8 +71,6 @@ export default function WeekPlan({}: Props): ReactElement {
   const [totalMinutes, setTotalMinutes] = useState<number>(0);
   const [totalHours, setTotalHours] = useState<number>(0);
   useEffect(() => {
-    // dispatch(_fetchGoalsForWeek(weekNumber || params.weekNumber));
-    // dispatch(_fetchWeek(weekNumber || params.weekNumber));
     dispatch(
       _fetchWeek({
         userId: userId,

@@ -18,7 +18,6 @@ import { ApplicationState } from "../../../app/store";
 import { Day, Goal, Progress, Task, Week } from "../../../shared/Interfaces";
 import AddProgress from "./AddProgress";
 import { makeStyles } from "@material-ui/core";
-import { stringify } from "querystring";
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({

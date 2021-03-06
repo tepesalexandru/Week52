@@ -3,7 +3,6 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, useHistory } from "react-router";
 import { ApplicationState } from "../../../app/store";
-import { deleteGoal } from "../Services/goalService";
 import WeekSidebar from "./WeekSidebar";
 import { _fetchWeek } from "../Slices/weekSlice";
 import { Goal, Task, Week } from "../../../shared/Interfaces";

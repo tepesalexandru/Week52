@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getWeekNumber } from "../features/Helpers";
 import { setCurrentWeek } from "../features/Weekly/Slices/metadataSlice";
 import { _fetchWeek } from "../features/Weekly/Slices/weekSlice";
-import { SatelliteSharp } from "@material-ui/icons";
 import { ApplicationState } from "./store";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +25,7 @@ export default () => {
 
   useEffect(() => {
     const currentWeek = getWeekNumber(new Date());
-    if (currentWeek != 0) {
+    if (currentWeek != 0 && userId) {
       dispatch(_fetchWeek({ userId: userId, weekNumber: currentWeek }));
       dispatch(setCurrentWeek(currentWeek));
     }
