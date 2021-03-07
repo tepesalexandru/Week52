@@ -9,6 +9,8 @@ import { Goal, Task, Week } from "../../../shared/Interfaces";
 import DayOverview from "./DayOverview";
 import WeekReport from "./WeekReport";
 import { useStyles } from "./Styles/WeeklyGoals";
+import { getAllTaskProgress } from "./Helpers/taskHelpers";
+import { getWeekNumber } from "../../Helpers";
 
 interface Props {}
 
@@ -52,7 +54,9 @@ export default function WeeklyGoals({}: Props): ReactElement {
             // style={{ opacity: task.completed ? 0.4 : 1 }}
           >
             <span>{task.name}</span>
-            <span>{task.duration} minutes</span>
+            <span>
+              {getAllTaskProgress(currentWeek, task.id)}/{task.duration} minutes
+            </span>
           </div>
         </div>
       );
@@ -88,14 +92,6 @@ export default function WeeklyGoals({}: Props): ReactElement {
           >
             Year Overview
           </Button>
-          {/* <Button
-            variant="contained"
-            color="primary"
-            onClick={() => history.push(`/add-progress`)}
-            style={{ marginLeft: 16 }}
-          >
-            Add Progress
-          </Button> */}
         </div>
       </div>
       <div className={classes.bodyRoot}>
