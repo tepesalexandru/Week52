@@ -13,6 +13,7 @@ import {
 import React, { ReactElement } from "react";
 import { useParams } from "react-router";
 import { Day, Goal, Progress, Task, Week } from "../../../shared/Interfaces";
+import { getTaskRequiredTime } from "./Helpers/taskHelpers";
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -44,60 +45,6 @@ interface Props {
 export default function WeekReport(props: Props): ReactElement {
   const params: any = useParams();
   const dayNumber = params.dayNumber;
-
-  const getTaskById = (taskId: string, progress?: Progress): Task => {
-    if (progress) {
-      const goal = props.week.goals.find((x) => x.id === progress.goalId);
-      if (goal != undefined) {
-        const task = goal.tasks.find((x) => x.id === progress.taskId);
-        if (task != undefined) {
-          return task;
-        }
-      }
-    } else {
-      let taskToReturn: Task = {} as Task;
-      props.week.goals.forEach((goal: Goal) => {
-        goal.tasks.forEach((task: Task) => {
-          if (task.id === taskId) taskToReturn = task;
-        });
-      });
-      return taskToReturn;
-    }
-    return {} as Task;
-  };
-
-  const getTaskRequiredTime = (taskId: string): number => {
-    const task = getTaskById(taskId);
-    if (task) {
-      return task.duration;
-    }
-    return 0;
-  };
-
-  const getGoalNameById = (progress: Progress) => {
-    const goal = props.week.goals.find((x) => x.id === progress.goalId);
-    if (goal != undefined) return goal.name;
-  };
-
-  const getTaskProgressByDay = (taskId: string, dayNumber: number): number => {
-    let taskProgress = 0;
-    props.week.days[dayNumber].overview.forEach((progress: Progress) => {
-      if (progress.taskId === taskId) {
-        taskProgress += progress.progress;
-      }
-    });
-    return Math.min(taskProgress, getTaskRequiredTime(taskId));
-  };
-
-  const getPreviousTaskProgress = (taskId: string): number => {
-    let previousProgress = 0;
-    props.week.days.forEach((day: Day, idx: number) => {
-      if (idx < dayNumber - 1) {
-        previousProgress += getTaskProgressByDay(taskId, idx);
-      }
-    });
-    return previousProgress;
-  };
 
   const getDayProgress = (idx: number): number => {
     let totalProgress = 0;
