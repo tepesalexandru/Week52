@@ -41,7 +41,7 @@ export default function DayOverview(props: Props): ReactElement {
   }, [params.dayNumber]);
 
   const renderCompletedMark = (dayCompleted: number, currentDay: number) => {
-    if (dayCompleted <= currentDay)
+    if (dayCompleted && dayCompleted <= currentDay)
       return <CheckIcon style={{ fill: "#6D9F71", marginLeft: 12 }} />;
     return <div style={{ marginLeft: 12 }}></div>;
   };
