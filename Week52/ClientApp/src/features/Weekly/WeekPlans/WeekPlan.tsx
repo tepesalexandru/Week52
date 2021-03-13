@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { ApplicationState } from "../../../app/store";
 import { makeStyles } from "@material-ui/core";
-import { deleteGoal } from "../Services/goalService";
 import { Goal, Task } from "../../../shared/Interfaces";
 import { _deleteGoal, _deleteTask, _fetchWeek } from "../Slices/weekSlice";
 
@@ -83,7 +82,7 @@ export default function WeekPlan({}: Props): ReactElement {
     let neededMinutes = 0;
     goals.map((goal: Goal) => {
       goal.tasks.map((task: Task) => {
-        neededMinutes += task.duration;
+        neededMinutes += task.estimation;
       });
     });
     setTotalMinutes(neededMinutes);
@@ -97,7 +96,7 @@ export default function WeekPlan({}: Props): ReactElement {
           <div className={classes.taskBody}>
             <span>{task.name}</span>
             <div>
-              <span>{task.duration} minutes</span>
+              <span>{task.estimation} minutes</span>
               <Button
                 variant="contained"
                 color="primary"

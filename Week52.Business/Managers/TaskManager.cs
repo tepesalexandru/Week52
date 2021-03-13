@@ -11,27 +11,51 @@ namespace Week52.Business.Managers
     public interface ITaskManager
     {
         IEnumerable<BasicTask> GetTasks();
+        BasicTask GetTask(Guid TaskId);
         BasicTask CreateTask(Guid GoalId, BasicTask task);
-        Guid DeleteTask(BasicTask Task);
+        Guid DeleteTask(Guid TaskId);
+        BasicTask AddProgress(Guid TaskId, Progress progress);
+        BasicTask CompleteTask(Guid TaskId, int Day);
     }
     public class TaskManager : ITaskManager
     {
         private readonly IGenericRepository _genericRepository;
         private readonly IGoalRepository _goalRepository;
-        public TaskManager(IGenericRepository genericRepository, IGoalRepository goalRepository)
+        private readonly ITaskRepository _taskRepository;
+        public TaskManager(
+            IGenericRepository genericRepository, 
+            IGoalRepository goalRepository, 
+            ITaskRepository taskRepository
+        )
         {
             _genericRepository = genericRepository;
             _goalRepository = goalRepository;
+            _taskRepository = taskRepository;
+        }
+
+        public BasicTask AddProgress(Guid TaskId, Progress progress)
+        {
+            return _taskRepository.AddProgress(TaskId, progress);
+        }
+
+        public BasicTask CompleteTask(Guid TaskId, int Day)
+        {
+            return _taskRepository.CompleteTask(TaskId, Day);
         }
 
         public BasicTask CreateTask(Guid GoalId, BasicTask task)
         {
-            return _goalRepository.AddTask(GoalId, task);
+            return _taskRepository.AddTask(GoalId, task);
         }
 
-        public Guid DeleteTask(BasicTask task)
+        public Guid DeleteTask(Guid TaskId)
         {
-            return _goalRepository.DeleteTask(task);
+            return _taskRepository.DeleteTask(TaskId);
+        }
+
+        public BasicTask GetTask(Guid TaskId)
+        {
+            return _taskRepository.GetById(TaskId);
         }
 
         public IEnumerable<BasicTask> GetTasks()

@@ -1,41 +1,9 @@
 import React, { ReactElement, useState } from "react";
-import { makeStyles } from "@material-ui/core";
 import SidebarItem from "./SidebarItem";
-import { useDispatch, useSelector } from "react-redux";
-import { setDayIdSelected } from "../Slices/metadataSlice";
-import { ApplicationState } from "../../../app/store";
-import { Day } from "../../../shared/Interfaces";
+import { useDispatch } from "react-redux";
+import { setDaySelected } from "../Slices/metadataSlice";
 import { useHistory } from "react-router";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: 300,
-    height: "calc(100vh - 68px)",
-    backgroundColor: "#1e1e1e",
-    color: "#dddddd",
-  },
-  header: {
-    padding: "12px 24px",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  dayRoot: {
-    color: theme.palette.secondary.contrastText,
-    padding: "2px 24px",
-    "&:hover": {
-      backgroundColor: theme.palette.primary.main,
-      cursor: "pointer",
-      opacity: 0.8,
-    },
-  },
-  selectedDay: {
-    backgroundColor: theme.palette.primary.main,
-    fontWeight: "bold",
-    "&:hover": {
-      opacity: 1,
-    },
-  },
-}));
+import { useStyles } from "./Styles/WeekSidebarStyles";
 
 interface Props {}
 
@@ -44,36 +12,35 @@ export default function WeekSidebar({}: Props): ReactElement {
   const dispatch = useDispatch();
   const history = useHistory();
   const [selectedMenuItem, setSelectedMenuItem] = useState(null);
-  const days = useSelector((state: ApplicationState) => state.week.days);
 
-  const selectDay = (ref: any, dayId: string, dayNumber: number) => {
+  const selectDay = (ref: any, dayNumber: number) => {
     setSelectedMenuItem(ref);
-    dispatch(setDayIdSelected(dayId));
-    history.push(`/week/day/${dayNumber}`)
+    dispatch(setDaySelected(dayNumber));
+    history.push(`/week/day/${dayNumber}`);
   };
 
   const selectOverview = (ref: any) => {
     setSelectedMenuItem(ref);
-    history.push("/week/overview")
-  }
+    history.push("/week/overview");
+  };
 
   const selectReport = (ref: any) => {
     setSelectedMenuItem(ref);
-    history.push("/week/report")
-  }
+    history.push("/week/report");
+  };
 
   const selectRetrospectives = (ref: any) => {
     setSelectedMenuItem(ref);
-    history.push("/week/retrospectives")
-  }
+    history.push("/week/retrospectives");
+  };
 
   const renderDays = () => {
-    return days.map((day: Day) => {
+    return [1, 2, 3, 4, 5, 6, 7].map((day: number) => {
       return (
         <SidebarItem
-          key={day.id}
-          onClick={(ref: any) => selectDay(ref, day.id, day.dayNumber)}
-          label={`Day ${day.dayNumber}`}
+          key={`day-${day}`}
+          onClick={(ref: any) => selectDay(ref, day)}
+          label={`Day ${day}`}
           selectedItem={selectedMenuItem}
         />
       );

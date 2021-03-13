@@ -41,6 +41,7 @@ namespace Week52
             services.AddScoped<IGoalRepository, GoalRepository>();
             services.AddScoped<IWeekRepository, WeekRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
 
             services.AddScoped<ITaskManager, TaskManager>();
             services.AddScoped<IGoalManager, GoalManager>();

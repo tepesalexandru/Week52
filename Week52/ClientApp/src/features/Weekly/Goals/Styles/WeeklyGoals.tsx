@@ -22,6 +22,7 @@ export const useStyles = makeStyles((theme) => ({
     margin: "auto",
     marginTop: 36,
     marginLeft: 30,
+    marginRight: 30
   },
   goalRoot: {
     background: theme.palette.secondary.main,
