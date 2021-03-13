@@ -11,9 +11,12 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React, { ReactElement } from "react";
-import { useParams } from "react-router";
-import { Day, Goal, Progress, Task, Week } from "../../../shared/Interfaces";
-import { getTaskRequiredTime } from "./Helpers/taskHelpers";
+import { Week } from "../../../shared/Interfaces";
+import {
+  getDayOffset,
+  getProgressOnDay,
+  getProgressUntilDay,
+} from "./Helpers/_taskHelpers";
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -43,23 +46,20 @@ interface Props {
 }
 
 export default function WeekReport(props: Props): ReactElement {
-  const params: any = useParams();
-  const dayNumber = params.dayNumber;
 
-  const getDayProgress = (idx: number): number => {
-    let totalProgress = 0;
-    props.week.days[idx].overview.forEach((progress: Progress) => {
-      totalProgress += progress.progress;
-    });
-    return totalProgress;
+  console.log("active progress on day 5", getProgressOnDay(props.week, 5, false));
+  console.log("offset on day 5", getDayOffset(props.week, 5));
+
+  const getRemainingTime = (day: number) => {
+    return Math.max(
+      0,
+      props.totalMinutes -
+        getProgressUntilDay(props.week, day, false)
+    );
   };
 
-  const getPreviousDaysProgress = (idx: number): number => {
-    let previousProgress = 0;
-    for (let i = 0; i < idx; i++) {
-      previousProgress += getDayProgress(i);
-    }
-    return previousProgress;
+  const getRemainingPercentage = (day: number) => {
+    return ((getRemainingTime(day) / props.totalMinutes) * 100).toFixed(2);
   };
 
   const renderOverview = () => {
@@ -69,47 +69,25 @@ export default function WeekReport(props: Props): ReactElement {
           <TableHead>
             <TableRow>
               <StyledTableCell>Day of the Week</StyledTableCell>
-              <StyledTableCell align="left">Start of Day</StyledTableCell>
-              <StyledTableCell align="left">End of Day</StyledTableCell>
               <StyledTableCell align="left">Progress</StyledTableCell>
+              <StyledTableCell align="left">Remaining</StyledTableCell>
               <StyledTableCell align="left">Remaining%</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.week.days.map((day: Day) => (
-              <StyledTableRow key={day.id}>
+            {[1, 2, 3, 4, 5, 6, 7].map((day: number) => (
+              <StyledTableRow key={`day-${day}`}>
                 <StyledTableCell component="th" scope="row">
-                  Day {day.dayNumber}
+                  Day {day}
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {Math.max(
-                    props.totalMinutes -
-                      getPreviousDaysProgress(day.dayNumber - 1),
-                    0
-                  )}{" "}
-                  minutes
+                  {getProgressOnDay(props.week, day, false)} minutes
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {Math.max(
-                    props.totalMinutes -
-                      getPreviousDaysProgress(day.dayNumber - 1) -
-                      getDayProgress(day.dayNumber - 1),
-                    0
-                  )}{" "}
-                  minutes
+                  {getRemainingTime(day)} minutes
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {getDayProgress(day.dayNumber - 1)} minutes
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  {(
-                    ((props.totalMinutes -
-                      getPreviousDaysProgress(day.dayNumber - 1) -
-                      getDayProgress(day.dayNumber - 1)) /
-                      props.totalMinutes) *
-                    100
-                  ).toFixed(2)}
-                  %
+                  {getRemainingPercentage(day)}%
                 </StyledTableCell>
               </StyledTableRow>
             ))}

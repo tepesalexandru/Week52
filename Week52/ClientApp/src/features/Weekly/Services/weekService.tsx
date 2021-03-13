@@ -6,7 +6,7 @@ export const getWeek = async (userId: string, weekNumber: number) => {
   return response.data;
 };
 
-export const addProgress = async (dayId: string, progress: Progress) => {
-  const response = await axios.patch(`api/Week/addProgress/${dayId}`, progress);
-  return response.data;
-};
+// export const addProgress = async (dayId: string, progress: Progress) => {
+//   const response = await axios.patch(`api/Week/addProgress/${dayId}`, progress);
+//   return response.data;
+// };

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Week52.DataAccess.Context;
 
 namespace Week52.DataAccess.Migrations
 {
     [DbContext(typeof(Week52DbContext))]
-    partial class Week52DbContextModelSnapshot : ModelSnapshot
+    [Migration("20210311212820_db-refactor")]
+    partial class dbrefactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,21 +111,18 @@ namespace Week52.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Day")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("BasicTaskId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Minutes")
                         .HasColumnType("int");
-
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("BasicTaskId");
 
                     b.ToTable("Progress");
                 });
@@ -152,13 +151,9 @@ namespace Week52.DataAccess.Migrations
 
             modelBuilder.Entity("Week52.DataAccess.Entities.Progress", b =>
                 {
-                    b.HasOne("Week52.DataAccess.Entities.BasicTask", "Task")
+                    b.HasOne("Week52.DataAccess.Entities.BasicTask", null)
                         .WithMany("ProgressByDay")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Task");
+                        .HasForeignKey("BasicTaskId");
                 });
 
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicGoal", b =>

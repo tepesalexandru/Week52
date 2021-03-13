@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export interface MetadataState {
   weekSelected: number;
-  dayIdSelected: string;
+  daySelected: number;
   currentWeek: number;
   weekId: string;
   userId: string;
@@ -11,7 +11,7 @@ export interface MetadataState {
 
 const INITIAL_STATE: MetadataState = {
   weekSelected: 0,
-  dayIdSelected: "",
+  daySelected: 0,
   currentWeek: 0,
   weekId: "",
   userId: "",
@@ -36,8 +36,8 @@ export const metadataSlice = createSlice({
     setCurrentWeek: (state, action) => {
       state.currentWeek = action.payload;
     },
-    setDayIdSelected: (state, action) => {
-      state.dayIdSelected = action.payload;
+    setDaySelected: (state, action) => {
+      state.daySelected = action.payload;
     },
   },
 });
@@ -45,6 +45,6 @@ export const metadataSlice = createSlice({
 export const {
   setSelectedWeek,
   setCurrentWeek,
-  setDayIdSelected,
+  setDaySelected,
   setUser,
 } = metadataSlice.actions;

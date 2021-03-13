@@ -3,21 +3,45 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Week52.DataAccess.Context;
 
 namespace Week52.DataAccess.Migrations
 {
     [DbContext(typeof(Week52DbContext))]
-    partial class Week52DbContextModelSnapshot : ModelSnapshot
+    [Migration("20210309190944_mark-complete-task")]
+    partial class markcompletetask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Week52.DataAccess.Entities.BasicDay", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DayNumber")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WeekId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WeekId");
+
+                    b.ToTable("Days");
+                });
 
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicGoal", b =>
                 {
@@ -41,16 +65,44 @@ namespace Week52.DataAccess.Migrations
                     b.ToTable("Goals");
                 });
 
+            modelBuilder.Entity("Week52.DataAccess.Entities.BasicProgress", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BasicDayId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GoalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Progress")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BasicDayId");
+
+                    b.ToTable("Progress");
+                });
+
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicTask", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("DayCompleted")
-                        .HasColumnType("int");
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("Estimation")
+                    b.Property<int>("Duration")
                         .HasColumnType("int");
 
                     b.Property<Guid>("GoalId")
@@ -103,29 +155,15 @@ namespace Week52.DataAccess.Migrations
                     b.ToTable("Weeks");
                 });
 
-            modelBuilder.Entity("Week52.DataAccess.Entities.Progress", b =>
+            modelBuilder.Entity("Week52.DataAccess.Entities.BasicDay", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.HasOne("Week52.DataAccess.Entities.BasicWeek", "Week")
+                        .WithMany("Days")
+                        .HasForeignKey("WeekId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("Day")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Minutes")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("Progress");
+                    b.Navigation("Week");
                 });
 
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicGoal", b =>
@@ -139,6 +177,13 @@ namespace Week52.DataAccess.Migrations
                     b.Navigation("Week");
                 });
 
+            modelBuilder.Entity("Week52.DataAccess.Entities.BasicProgress", b =>
+                {
+                    b.HasOne("Week52.DataAccess.Entities.BasicDay", null)
+                        .WithMany("Overview")
+                        .HasForeignKey("BasicDayId");
+                });
+
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicTask", b =>
                 {
                     b.HasOne("Week52.DataAccess.Entities.BasicGoal", "Goal")
@@ -150,15 +195,9 @@ namespace Week52.DataAccess.Migrations
                     b.Navigation("Goal");
                 });
 
-            modelBuilder.Entity("Week52.DataAccess.Entities.Progress", b =>
+            modelBuilder.Entity("Week52.DataAccess.Entities.BasicDay", b =>
                 {
-                    b.HasOne("Week52.DataAccess.Entities.BasicTask", "Task")
-                        .WithMany("ProgressByDay")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Task");
+                    b.Navigation("Overview");
                 });
 
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicGoal", b =>
@@ -166,13 +205,10 @@ namespace Week52.DataAccess.Migrations
                     b.Navigation("Tasks");
                 });
 
-            modelBuilder.Entity("Week52.DataAccess.Entities.BasicTask", b =>
-                {
-                    b.Navigation("ProgressByDay");
-                });
-
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicWeek", b =>
                 {
+                    b.Navigation("Days");
+
                     b.Navigation("Goals");
                 });
 #pragma warning restore 612, 618

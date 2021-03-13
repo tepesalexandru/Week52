@@ -1,61 +1,35 @@
 import { Button } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useHistory } from "react-router";
+import { Controller, useForm } from "react-hook-form";
 import InputWithValidation from "../../../shared/InputWithValidation";
-import { makeStyles } from "@material-ui/core";
-import { ApplicationState } from "../../../app/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import SelectWithValidation from "../../../shared/SelectWithValidation";
-import { Day, Goal, Progress, Task, Week } from "../../../shared/Interfaces";
-import { _addProgress } from "../Slices/weekSlice";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    paddingTop: 24,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: theme.palette.secondary.contrastText,
-  },
-  container: {
-    background: theme.palette.secondary.main,
-    margin: "auto",
-    padding: "36px 48px",
-    borderRadius: 12,
-  },
-  inputsContainer: {
-    marginBottom: 24,
-    "& > div": {
-      marginBottom: 8,
-    },
-  },
-}));
+import { Goal, Progress, Task } from "../../../shared/Interfaces";
+import { _addProgress, _completeTask } from "../Slices/weekSlice";
+import { useStyles, MainCheckbox } from "./Styles/AddProgressStyles";
 
 interface Props {
-  daySelected: Day;
   goals: Goal[];
   onClick?: any;
+  day: number;
 }
 
 export default function AddProgress(props: Props): ReactElement {
   const dispatch = useDispatch();
   const formHook = useForm<Task>();
-  const [goals, setGoals] = useState<Goal[]>(props.goals);
   const [tasks, setTasks] = useState([]);
   const classes = useStyles();
   const onSubmit = (formValues: Progress) => {
     dispatch(
       _addProgress({
-        dayId: props.daySelected.id,
-        progress: {
-          taskId: formValues.taskId,
-          goalId: formValues.goalId,
-          progress: +formValues.progress,
-        },
+        day: props.day,
+        minutes: +formValues.minutes,
+        taskId: formValues.taskId,
       })
     );
+    if (formHook.getValues('complete') === true) {
+      dispatch(_completeTask({ taskId: formValues.taskId, day: props.day }));
+    }
     props.onClick();
   };
 
@@ -76,7 +50,7 @@ export default function AddProgress(props: Props): ReactElement {
             formHook={formHook}
             name="goalId"
             label="goal"
-            values={goals}
+            values={props.goals}
             defaultValue={""}
             validation={{ required: true }}
           />
@@ -84,15 +58,31 @@ export default function AddProgress(props: Props): ReactElement {
             formHook={formHook}
             name="taskId"
             label="task"
+            // values={tasks.filter((task: Task) => task.completed === false)}
             values={tasks}
             validation={{ required: true }}
           />
           <InputWithValidation
             formHook={formHook}
-            name="progress"
+            name="minutes"
             label="Minutes"
             type="number"
             validation={{ required: true }}
+          />
+          <Controller
+            name="complete"
+            control={formHook.control}
+            render={({ ref, value, onChange }) => (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <MainCheckbox
+                  title="Mark as completed"
+                  checked={value}
+                  ref={ref}
+                  onChange={(e) => onChange(e.target.checked)}
+                />
+                <div className={classes.subtitle}>Mark as complete</div>
+              </div>
+            )}
           />
         </div>
         <Button

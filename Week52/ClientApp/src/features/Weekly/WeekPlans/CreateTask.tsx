@@ -51,7 +51,7 @@ export default function CreateTask({}: Props): ReactElement {
           />
           <InputWithValidation
             formHook={formHook}
-            name="duration"
+            name="estimation"
             type="number"
             validation={{ required: true }}
           />

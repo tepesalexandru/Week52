@@ -11,10 +11,8 @@ namespace Week52.DataAccess.Entities
         public BasicWeek()
         {
             Goals = new List<BasicGoal>();
-            Days = new List<BasicDay>();
         }
         public int WeekNumber { get; set; }
         public virtual ICollection<BasicGoal> Goals { get; set; }
-        public virtual ICollection<BasicDay> Days { get; set; }
     }
 }

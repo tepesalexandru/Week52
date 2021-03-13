@@ -14,12 +14,11 @@ namespace Week52.DataAccess.Context
         {
             
         }
-        public DbSet<BasicUser> Users { get; set; }
-        public DbSet<BasicTask> Tasks { get; set; }
-        public DbSet<BasicGoal> Goals { get; set; }
-        public DbSet<BasicDay> Days { get; set; }
         public DbSet<BasicWeek> Weeks { get; set; }
-        public DbSet<BasicProgress> Progress { get; set; }
+        public DbSet<BasicUser> Users { get; set; }
+        public DbSet<BasicGoal> Goals { get; set; }
+        public DbSet<BasicTask> Tasks { get; set; }
+        public DbSet<Progress> Progress { get; set; }
 
     }
 }

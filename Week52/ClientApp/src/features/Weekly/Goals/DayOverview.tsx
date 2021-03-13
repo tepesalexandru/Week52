@@ -1,77 +1,23 @@
 import {
   Button,
-  createStyles,
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Theme,
-  withStyles,
 } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { ApplicationState } from "../../../app/store";
-import { Progress, Week } from "../../../shared/Interfaces";
+import { Overview, Week } from "../../../shared/Interfaces";
 import AddProgress from "./AddProgress";
-import { makeStyles } from "@material-ui/core";
+import { getOverviewOnDay } from "./Helpers/_taskHelpers";
 import {
-  calculateRemainingTaskTime,
-  getPreviousTaskProgress,
-  getTaskById,
-  getTaskRequiredTime,
-} from "./Helpers/taskHelpers";
-
-const StyledTableCell = withStyles((theme: Theme) =>
-  createStyles({
-    head: {
-      backgroundColor: theme.palette.secondary.main,
-      color: theme.palette.common.white,
-    },
-    body: {
-      fontSize: 14,
-    },
-  })
-)(TableCell);
-
-const StyledTableRow = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      "&:nth-of-type(odd)": {
-        backgroundColor: theme.palette.action.hover,
-      },
-    },
-  })
-)(TableRow);
-
-const useStyles = makeStyles((theme) => ({
-  singleProgressRoot: {
-    display: "flex",
-  },
-  progressPieceContainer: {
-    backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText,
-    padding: "8px 50px",
-    borderRadius: 12,
-    margin: "4px 2px",
-  },
-  arrowContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: 50,
-    "& svg": {
-      height: 45,
-      width: 45,
-    },
-  },
-  editModeContainer: {
-    marginBottom: 20,
-  },
-}));
+  StyledTableCell,
+  StyledTableRow,
+  useStyles,
+} from "./Styles/DayOverviewStyles";
+import CheckIcon from "@material-ui/icons/CheckCircle";
 
 interface Props {
   week: Week;
@@ -82,47 +28,27 @@ export default function DayOverview(props: Props): ReactElement {
   const classes = useStyles();
   const dayNumber = +params.dayNumber;
   const [editMode, setEditMode] = useState(false);
-  const [tasksProgress, setTasksProgress] = useState<any>([]);
-  const daySelected = useSelector(
-    (state: ApplicationState) => state.week.days[dayNumber - 1]
+  const [dayOverview, setDayOverview] = useState<Overview[]>(
+    getOverviewOnDay(props.week, dayNumber)
   );
 
   useEffect(() => {
-    const baseTasks: any = [];
-    const appearedTasks: string[] = [];
-    const hasAppeared = (taskId: string) => {
-      return appearedTasks.indexOf(taskId) !== -1;
-    };
-    if (daySelected)
-      daySelected.overview.forEach((progress: Progress) => {
-        if (!hasAppeared(progress.taskId)) {
-          let newTask: any = {
-            id: progress.taskId,
-            goalId: progress.goalId,
-            progress: progress.progress,
-          };
-          baseTasks.push(newTask);
-          appearedTasks.push(progress.taskId);
-        } else {
-          let idx = appearedTasks.indexOf(progress.taskId);
-          baseTasks[idx].progress += progress.progress;
-        }
-      });
-    setTasksProgress(baseTasks);
-  }, [JSON.stringify(daySelected)]);
+    setDayOverview(getOverviewOnDay(props.week, dayNumber));
+  }, [dayNumber, JSON.stringify(props.week.goals)]);
 
   useEffect(() => {
     setEditMode(false);
   }, [params.dayNumber]);
 
-  const getGoalNameById = (goalId: string) => {
-    const goal = props.week.goals.find((x) => x.id === goalId);
-    if (goal != undefined) return goal.name;
+  const renderCompletedMark = (dayCompleted: number, currentDay: number) => {
+    if (dayCompleted <= currentDay)
+      return <CheckIcon style={{ fill: "#6D9F71", marginLeft: 12 }} />;
+    return <div style={{ marginLeft: 12 }}></div>;
   };
 
   const renderOverview = () => {
-    if (daySelected === undefined) return <div></div>;
-    if (daySelected.overview.length === 0) {
+    if (dayNumber === undefined) return <div></div>;
+    if (dayOverview.length === 0) {
       return <div style={{ color: "white" }}>No registered progress.</div>;
     } else {
       return (
@@ -132,51 +58,36 @@ export default function DayOverview(props: Props): ReactElement {
               <TableRow>
                 <StyledTableCell>Goal Name</StyledTableCell>
                 <StyledTableCell align="left">Task</StyledTableCell>
-                <StyledTableCell align="left">Start of Day</StyledTableCell>
-                <StyledTableCell align="left">Remaining</StyledTableCell>
                 <StyledTableCell align="left">Progress</StyledTableCell>
+                <StyledTableCell align="left">Remaining</StyledTableCell>
+                <StyledTableCell align="left">Completed</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {tasksProgress.map(
-                (taskProgress: {
-                  id: string;
-                  progress: number;
-                  goalId: string;
-                }) => {
-                  return (
-                    <StyledTableRow key={taskProgress.id}>
-                      <StyledTableCell component="th" scope="row">
-                        {getGoalNameById(taskProgress.goalId)}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {getTaskById(props.week, taskProgress.id).name}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {getTaskRequiredTime(props.week, taskProgress.id) -
-                          getPreviousTaskProgress(
-                            props.week,
-                            taskProgress.id,
-                            dayNumber
-                          )}{" "}
-                        minutes
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {calculateRemainingTaskTime(
-                          props.week,
-                          dayNumber,
-                          taskProgress.id,
-                          taskProgress.progress
-                        )}{" "}
-                        minutes
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {taskProgress.progress} minutes
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                }
-              )}
+              {dayOverview.map((overview: Overview) => {
+                return (
+                  <StyledTableRow key={overview.task.id}>
+                    <StyledTableCell component="th" scope="row">
+                      {overview.goalName}
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {overview.task.name}
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {overview.progress} minutes
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {overview.remaining} minutes
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {renderCompletedMark(
+                        overview.task.dayCompleted,
+                        dayNumber
+                      )}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
@@ -199,7 +110,7 @@ export default function DayOverview(props: Props): ReactElement {
       return (
         <React.Fragment>
           <AddProgress
-            daySelected={daySelected}
+            day={dayNumber}
             goals={props.week.goals}
             onClick={() => setEditMode(false)}
           />

@@ -26,14 +26,5 @@ namespace Week52.WebAPI.Controllers
             return Ok(_weekManager.GetWeek(UserId, WeekNumber));
         }
 
-
-        [HttpPatch]
-        [Route("addProgress/{DayId}")]
-        public IActionResult AddProgress(Guid DayId, BasicProgress progress)
-        {
-            _weekManager.AddProgress(DayId, progress);
-            return Ok();
-        }
-
     }
 }

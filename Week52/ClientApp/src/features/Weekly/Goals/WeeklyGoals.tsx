@@ -9,8 +9,8 @@ import { Goal, Task, Week } from "../../../shared/Interfaces";
 import DayOverview from "./DayOverview";
 import WeekReport from "./WeekReport";
 import { useStyles } from "./Styles/WeeklyGoals";
-import { getAllTaskProgress } from "./Helpers/taskHelpers";
-import { getWeekNumber } from "../../Helpers";
+import CheckIcon from "@material-ui/icons/CheckCircle";
+import { getAllTaskProgress } from "./Helpers/_taskHelpers";
 
 interface Props {}
 
@@ -22,41 +22,35 @@ export default function WeeklyGoals({}: Props): ReactElement {
     (state: ApplicationState) => state.week
   );
   const [totalMinutes, setTotalMinutes] = useState<number>(0);
-  const [totalHours, setTotalHours] = useState<number>(0);
 
   useEffect(() => {
-    let neededMinutes = 0;
-    let totalProgress = 0;
-    currentWeek.goals.map((goal: Goal) => {
-      goal.tasks.map((task: Task) => {
-        neededMinutes += task.duration;
-        // totalProgress += task.progress;
+    let minutes = 0;
+    currentWeek.goals.forEach((goal: Goal) => {
+      goal.tasks.forEach((task: Task) => {
+        minutes += task.estimation;
       });
     });
-    let remainingMinutes = neededMinutes - totalProgress;
-    remainingMinutes = Math.max(0, remainingMinutes);
-    setTotalMinutes(remainingMinutes);
-    setTotalHours(+(remainingMinutes / 60).toFixed(2));
+    setTotalMinutes(minutes);
   }, [JSON.stringify(currentWeek.goals)]);
 
-  const getOvertime = (initial: number, progress: number) => {
-    if (progress > initial)
-      return " | " + (progress - initial).toString() + " minutes overtime.";
-    return "";
-  };
-
   const renderTasks = (tasks: Task[]) => {
+    const renderCompletedMark = (dayCompleted: number) => {
+      if (dayCompleted > 0)
+        return <CheckIcon style={{ fill: "#6D9F71", marginLeft: 12 }} />;
+      return <div style={{ marginLeft: 12 }}></div>;
+    };
+
     return tasks.map((task) => {
       return (
         <div key={task.id} className={classes.taskRoot}>
-          <div
-            className={classes.taskBody}
-            // style={{ opacity: task.completed ? 0.4 : 1 }}
-          >
+          <div className={classes.taskBody}>
             <span>{task.name}</span>
-            <span>
-              {getAllTaskProgress(currentWeek, task.id)}/{task.duration} minutes
-            </span>
+            <div>
+              <span>
+                {getAllTaskProgress(task)} / {task.estimation} minutes
+              </span>
+              {renderCompletedMark(task.dayCompleted)}
+            </div>
           </div>
         </div>
       );
@@ -81,7 +75,8 @@ export default function WeeklyGoals({}: Props): ReactElement {
     <div>
       <div className={classes.header}>
         <p className={classes.title}>
-          Your tasks for this Week - {totalMinutes} minutes ({totalHours} hours)
+          Your tasks for this Week - {totalMinutes} minutes (
+          {(totalMinutes / 60).toFixed(2)} hours)
         </p>
         <div>
           <Button
