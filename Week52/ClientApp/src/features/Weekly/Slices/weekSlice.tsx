@@ -106,11 +106,7 @@ export const weekSlice = createSlice({
     builder.addCase(_deleteTask.fulfilled, (state: Week, action) => {
       for (let k = 0; k < state.goals.length; k++) {
         state.goals[k].tasks = state.goals[k].tasks.filter((task: Task) => {
-          const goalTasks = [...state.goals[k].tasks];
-          for (let i = 0; i < goalTasks.length; i++) {
-            if (goalTasks[i].id == action.payload) return false;
-          }
-          return true;
+          return task.id !== action.payload;
         });
       }
       return state;
