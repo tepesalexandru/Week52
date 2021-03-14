@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Week52.Business.Managers;
 using Week52.DataAccess.Entities;
+using Week52.WebAPI.Controllers.Entities;
 
 namespace Week52.WebAPI.Controllers
 {
@@ -55,12 +56,18 @@ namespace Week52.WebAPI.Controllers
             return Ok(_taskManager.AddProgress(TaskId, progress));
         }
 
-
         [HttpPatch]
         [Route("complete/{TaskId}/{Day}")]
         public IActionResult Complete(Guid TaskId, int Day)
         {
             return Ok(_taskManager.CompleteTask(TaskId, Day));
+        }
+
+        [HttpPatch]
+        [Route("updateNote/{TaskId}")]
+        public IActionResult UpdateNote(Guid TaskId, [FromBody] TaskNote TaskNote)
+        {
+            return Ok(_taskManager.UpdateNote(TaskId, TaskNote.Note));
         }
 
     }

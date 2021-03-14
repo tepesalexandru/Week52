@@ -24,4 +24,9 @@ export const deleteTask = async (id: string) => {
 export const addProgress = async (taskId: string, progress: Progress) => {
   const response = await axios.post(`api/Task/addProgress/${taskId}`, progress);
   return response.data;
-}
+};
+
+export const updateNote = async (taskId: string, note: string) => {
+  const response = await axios.patch(`api/Task/updateNote/${taskId}`, { note });
+  return response.data;
+};

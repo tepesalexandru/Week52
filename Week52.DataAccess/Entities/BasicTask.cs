@@ -28,5 +28,6 @@ namespace Week52.DataAccess.Entities
         public int Estimation { get; set; }
         public virtual ICollection<Progress> ProgressByDay { get; set; } 
         public int DayCompleted { get; set; }
+        public string Note { get; set; }
     }
 }

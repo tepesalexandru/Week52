@@ -16,6 +16,7 @@ namespace Week52.DataAccess.Repositories
         Guid DeleteTask(Guid TaskId);
         BasicTask AddProgress(Guid TaskId, Progress progress);
         BasicTask CompleteTask(Guid TaskId, int Day);
+        BasicTask UpdateNote(Guid TaskId, string Note);
     }
     public class TaskRepository : ITaskRepository
     {
@@ -23,6 +24,11 @@ namespace Week52.DataAccess.Repositories
         public TaskRepository(Week52DbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public BasicTask GetById(Guid Id)
+        {
+            return _dbContext.Tasks.FirstOrDefault(x => x.Id == Id);
         }
 
         public BasicTask AddProgress(Guid TaskId, Progress progress)
@@ -59,7 +65,7 @@ namespace Week52.DataAccess.Repositories
 
         public BasicTask CompleteTask(Guid TaskId, int Day)
         {
-            var task = _dbContext.Tasks.FirstOrDefault(x => x.Id == TaskId);
+            var task = GetById(TaskId);
             task.DayCompleted = Day;
             _dbContext.SaveChanges();
             return task;
@@ -77,9 +83,14 @@ namespace Week52.DataAccess.Repositories
             return TaskId;
         }
 
-        public BasicTask GetById(Guid Id)
+        
+
+        public BasicTask UpdateNote(Guid TaskId, string Note)
         {
-            return _dbContext.Tasks.FirstOrDefault(x => x.Id == Id);
+            var task = GetById(TaskId);
+            task.Note = Note;
+            _dbContext.SaveChanges();
+            return task;
         }
     }
 

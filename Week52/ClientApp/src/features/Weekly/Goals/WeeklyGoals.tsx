@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, useHistory } from "react-router";
@@ -11,6 +11,7 @@ import WeekReport from "./WeekReport";
 import { useStyles } from "./Styles/WeeklyGoals";
 import CheckIcon from "@material-ui/icons/CheckCircle";
 import { getAllTaskProgress } from "./Helpers/_taskHelpers";
+import NoteDialog from "./NoteDialog";
 
 interface Props {}
 
@@ -40,11 +41,18 @@ export default function WeeklyGoals({}: Props): ReactElement {
       return <div style={{ marginLeft: 12 }}></div>;
     };
 
+    const renderNoteIcon = (task: Task) => {
+      return <NoteDialog task={task} />;
+    };
+
     return tasks.map((task) => {
       return (
         <div key={task.id} className={classes.taskRoot}>
           <div className={classes.taskBody}>
-            <span>{task.name}</span>
+            <div>
+              <span>{task.name}</span>
+              <span className={classes.noteIcon}>{renderNoteIcon(task)}</span>
+            </div>
             <div>
               <span>
                 {getAllTaskProgress(task)} / {task.estimation} minutes
