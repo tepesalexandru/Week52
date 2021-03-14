@@ -18,6 +18,7 @@ export interface Task extends Base {
   estimation: number;
   progressByDay: Progress[];
   dayCompleted: number;
+  note: string;
 }
 
 export interface Progress extends Base {

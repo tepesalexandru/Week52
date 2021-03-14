@@ -22,7 +22,7 @@ export const useStyles = makeStyles((theme) => ({
     margin: "auto",
     marginTop: 36,
     marginLeft: 30,
-    marginRight: 30
+    marginRight: 30,
   },
   goalRoot: {
     background: theme.palette.secondary.main,
@@ -48,5 +48,13 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
     width: "95%",
+  },
+  noteIcon: {
+    opacity: 0.65,
+    cursor: "pointer",
+    marginLeft: 12,
+    "&:hover": {
+      opacity: 1,
+    },
   },
 }));

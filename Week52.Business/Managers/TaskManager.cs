@@ -16,20 +16,18 @@ namespace Week52.Business.Managers
         Guid DeleteTask(Guid TaskId);
         BasicTask AddProgress(Guid TaskId, Progress progress);
         BasicTask CompleteTask(Guid TaskId, int Day);
+        BasicTask UpdateNote(Guid TaskId, string Note);
     }
     public class TaskManager : ITaskManager
     {
         private readonly IGenericRepository _genericRepository;
-        private readonly IGoalRepository _goalRepository;
         private readonly ITaskRepository _taskRepository;
         public TaskManager(
             IGenericRepository genericRepository, 
-            IGoalRepository goalRepository, 
             ITaskRepository taskRepository
         )
         {
             _genericRepository = genericRepository;
-            _goalRepository = goalRepository;
             _taskRepository = taskRepository;
         }
 
@@ -61,6 +59,11 @@ namespace Week52.Business.Managers
         public IEnumerable<BasicTask> GetTasks()
         {
             return _genericRepository.GetAll<BasicTask>();
+        }
+
+        public BasicTask UpdateNote(Guid TaskId, string Note)
+        {
+            return _taskRepository.UpdateNote(TaskId, Note);
         }
     }
 
