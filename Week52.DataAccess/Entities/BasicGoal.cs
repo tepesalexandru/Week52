@@ -13,6 +13,7 @@ namespace Week52.DataAccess.Entities
         {
             Tasks = new List<BasicTask>();
         }
+        public Guid UserId { get; set; }
         public string Name { get; set; }
         public virtual ICollection<BasicTask> Tasks { get; set; }
         [ForeignKey("Week")]
