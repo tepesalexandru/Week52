@@ -5,8 +5,8 @@ export const useStyles = makeStyles((theme) => ({
     height: "fit-content",
     width: (props: any) => props.width || "100%",
     display: (props: any) => {
-      if (props.invisible) return 'none';
-    }
+      if (props.invisible) return "none";
+    },
   },
   errorMessage: {
     color: "#f00",
@@ -47,7 +47,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   flex1: {
     flex: 1,
-    width: 'inherit'
+    width: "inherit",
   },
   textField: {
     width: "100%",
@@ -58,11 +58,12 @@ export const useStyles = makeStyles((theme) => ({
   },
   select: {
     width: "100%",
+    minWidth: 300,
     // "&:focus": {
     //   background: "#f5f5f5",
     // },
   },
   label: {
     color: theme.palette.secondary.contrastText,
-  }
+  },
 }));

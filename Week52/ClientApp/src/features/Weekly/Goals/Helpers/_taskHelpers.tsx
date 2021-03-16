@@ -49,7 +49,7 @@ export const getOverviewOnDay = (week: Week, day: number) => {
         task.estimation - getTaskProgressUntilDay(task, day) < 0
       ) {
         offset = getTaskOffsetOnDay(task, day);
-        remaining = 0
+        remaining = 0;
       }
       if (taskProgress > 0) {
         dayOverview.push({
@@ -96,4 +96,12 @@ export const getProgressUntilDay = (
 
 export const getDayOffset = (week: Week, day: number) => {
   return getProgressOnDay(week, day, true) - getProgressOnDay(week, day, false);
+};
+
+export const getRemainingTime = (
+  week: Week,
+  day: number,
+  totalMinutes: number
+) => {
+  return Math.max(0, totalMinutes - getProgressUntilDay(week, day, false));
 };
