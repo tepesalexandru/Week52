@@ -10,8 +10,9 @@ import DayOverview from "./DayOverview";
 import WeekReport from "./WeekReport";
 import { useStyles } from "./Styles/WeeklyGoals";
 import CheckIcon from "@material-ui/icons/CheckCircle";
-import { getAllTaskProgress } from "./Helpers/_taskHelpers";
+import { getAllTaskProgress, getRemainingTime } from "./Helpers/_taskHelpers";
 import NoteDialog from "./NoteDialog";
+import Burndown from "./Burndown";
 
 interface Props {}
 
@@ -23,6 +24,16 @@ export default function WeeklyGoals({}: Props): ReactElement {
     (state: ApplicationState) => state.week
   );
   const [totalMinutes, setTotalMinutes] = useState<number>(0);
+  const [remainingByDay, setRemainingByDay] = useState<number[]>([]);
+
+  useEffect(() => {
+    setRemainingByDay([
+      totalMinutes,
+      ...[1, 2, 3, 4, 5, 6, 7].map((day: number): number => {
+        return getRemainingTime(currentWeek, day, totalMinutes);
+      }),
+    ]);
+  }, [totalMinutes]);
 
   useEffect(() => {
     let minutes = 0;
@@ -87,14 +98,20 @@ export default function WeeklyGoals({}: Props): ReactElement {
           {(totalMinutes / 60).toFixed(2)} hours)
         </p>
         <div>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => history.push("/year-overview")}
-            style={{ marginLeft: 16 }}
-          >
-            Year Overview
-          </Button>
+          <div>
+            <Burndown
+              totalMinutes={totalMinutes}
+              remainingByDay={remainingByDay}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => history.push("/year-overview")}
+              style={{ marginLeft: 16 }}
+            >
+              Year Overview
+            </Button>
+          </div>
         </div>
       </div>
       <div className={classes.bodyRoot}>
