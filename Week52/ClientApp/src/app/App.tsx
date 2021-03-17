@@ -25,7 +25,7 @@ export default () => {
 
   useEffect(() => {
     const currentWeek = getWeekNumber(new Date());
-    if (currentWeek != 0 && userId) {
+    if (currentWeek !== 0 && userId) {
       dispatch(_fetchWeek({ userId: userId, weekNumber: currentWeek }));
       dispatch(setCurrentWeek(currentWeek));
     }

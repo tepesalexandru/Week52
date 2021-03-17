@@ -5,11 +5,9 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
-import { spawn } from "child_process";
 import React, { ReactElement } from "react";
 import {
   Area,
-  AreaChart,
   CartesianGrid,
   ComposedChart,
   Label,
@@ -65,7 +63,7 @@ export default function Burndown(props: Props): ReactElement {
         maxWidth="md"
       >
         <DialogTitle id="alert-dialog-title">{`Burndown Trend`}</DialogTitle>
-        <DialogContent style={{ padding: 36, overflow: 'hidden' }}>
+        <DialogContent style={{ padding: 36, overflow: "hidden" }}>
           <DialogContentText id="alert-dialog-description">
             <ComposedChart
               width={730}
@@ -78,20 +76,14 @@ export default function Burndown(props: Props): ReactElement {
                   <stop offset="5%" stopColor="#bb86fc" stopOpacity={0.8} />
                   <stop offset="95%" stopColor="#bb86fc" stopOpacity={0} />
                 </linearGradient>
-                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#000000" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#000000" stopOpacity={0} />
-                </linearGradient>
               </defs>
               <XAxis dataKey="name" />
               <YAxis>
                 <Label
                   value="Remaining"
-                  style={{
-                    fontSize: "80%",
-                    fill: "rgb(102, 102, 102)",
-                    textAnchor: "middle",
-                  }}
+                  fill="rgb(102, 102, 102)"
+                  textAnchor="middle"
+                  fontSize="80%"
                   position="insideLeft"
                   angle={-90}
                 />
