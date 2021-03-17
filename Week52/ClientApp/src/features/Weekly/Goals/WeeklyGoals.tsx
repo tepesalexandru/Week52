@@ -1,10 +1,9 @@
-import { Button, Tooltip } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, useHistory } from "react-router";
 import { ApplicationState } from "../../../app/store";
 import WeekSidebar from "./WeekSidebar";
-import { _fetchWeek } from "../Slices/weekSlice";
 import { Goal, Task, Week } from "../../../shared/Interfaces";
 import DayOverview from "./DayOverview";
 import WeekReport from "./WeekReport";
@@ -16,7 +15,7 @@ import Burndown from "./Burndown";
 
 interface Props {}
 
-export default function WeeklyGoals({}: Props): ReactElement {
+export default function WeeklyGoals(props: Props): ReactElement {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();

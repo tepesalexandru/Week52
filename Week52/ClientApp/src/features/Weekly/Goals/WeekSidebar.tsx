@@ -7,7 +7,7 @@ import { useStyles } from "./Styles/WeekSidebarStyles";
 
 interface Props {}
 
-export default function WeekSidebar({}: Props): ReactElement {
+export default function WeekSidebar(props: Props): ReactElement {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();

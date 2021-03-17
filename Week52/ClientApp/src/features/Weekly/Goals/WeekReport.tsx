@@ -12,13 +12,7 @@ import {
 } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
 import { Week } from "../../../shared/Interfaces";
-import Burndown from "./Burndown";
-import {
-  getDayOffset,
-  getProgressOnDay,
-  getProgressUntilDay,
-  getRemainingTime,
-} from "./Helpers/_taskHelpers";
+import { getProgressOnDay, getRemainingTime } from "./Helpers/_taskHelpers";
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -48,16 +42,12 @@ interface Props {
 }
 
 export default function WeekReport(props: Props): ReactElement {
-  const [remainingByDay, setRemainingByDay] = useState<number[]>([]);
-
-  useEffect(() => {
-    setRemainingByDay([
-      props.totalMinutes,
-      ...[1, 2, 3, 4, 5, 6, 7].map((day: number): number => {
-        return getRemainingTime(props.week, day, props.totalMinutes);
-      }),
-    ]);
-  }, []);
+  const [remainingByDay, setRemainingByDay] = useState<number[]>([
+    props.totalMinutes,
+    ...[1, 2, 3, 4, 5, 6, 7].map((day: number): number => {
+      return getRemainingTime(props.week, day, props.totalMinutes);
+    }),
+  ]);
 
   const getRemainingPercentage = (day: number) => {
     return (
