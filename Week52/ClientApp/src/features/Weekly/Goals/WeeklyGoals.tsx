@@ -1,21 +1,21 @@
-import { Button, Tooltip } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, useHistory } from "react-router";
 import { ApplicationState } from "../../../app/store";
 import WeekSidebar from "./WeekSidebar";
-import { _fetchWeek } from "../Slices/weekSlice";
 import { Goal, Task, Week } from "../../../shared/Interfaces";
 import DayOverview from "./DayOverview";
 import WeekReport from "./WeekReport";
 import { useStyles } from "./Styles/WeeklyGoals";
 import CheckIcon from "@material-ui/icons/CheckCircle";
-import { getAllTaskProgress } from "./Helpers/_taskHelpers";
+import { getAllTaskProgress, getRemainingTime } from "./Helpers/_taskHelpers";
 import NoteDialog from "./NoteDialog";
+import Burndown from "./Burndown";
 
 interface Props {}
 
-export default function WeeklyGoals({}: Props): ReactElement {
+export default function WeeklyGoals(props: Props): ReactElement {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
@@ -23,6 +23,16 @@ export default function WeeklyGoals({}: Props): ReactElement {
     (state: ApplicationState) => state.week
   );
   const [totalMinutes, setTotalMinutes] = useState<number>(0);
+  const [remainingByDay, setRemainingByDay] = useState<number[]>([]);
+
+  useEffect(() => {
+    setRemainingByDay([
+      totalMinutes,
+      ...[1, 2, 3, 4, 5, 6, 7].map((day: number): number => {
+        return getRemainingTime(currentWeek, day, totalMinutes);
+      }),
+    ]);
+  }, [totalMinutes]);
 
   useEffect(() => {
     let minutes = 0;
@@ -87,14 +97,20 @@ export default function WeeklyGoals({}: Props): ReactElement {
           {(totalMinutes / 60).toFixed(2)} hours)
         </p>
         <div>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => history.push("/year-overview")}
-            style={{ marginLeft: 16 }}
-          >
-            Year Overview
-          </Button>
+          <div>
+            <Burndown
+              totalMinutes={totalMinutes}
+              remainingByDay={remainingByDay}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => history.push("/year-overview")}
+              style={{ marginLeft: 16 }}
+            >
+              Year Overview
+            </Button>
+          </div>
         </div>
       </div>
       <div className={classes.bodyRoot}>

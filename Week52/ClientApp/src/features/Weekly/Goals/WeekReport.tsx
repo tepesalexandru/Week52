@@ -10,13 +10,9 @@ import {
   Theme,
   withStyles,
 } from "@material-ui/core";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { Week } from "../../../shared/Interfaces";
-import {
-  getDayOffset,
-  getProgressOnDay,
-  getProgressUntilDay,
-} from "./Helpers/_taskHelpers";
+import { getProgressOnDay, getRemainingTime } from "./Helpers/_taskHelpers";
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -46,20 +42,19 @@ interface Props {
 }
 
 export default function WeekReport(props: Props): ReactElement {
-
-  console.log("active progress on day 5", getProgressOnDay(props.week, 5, false));
-  console.log("offset on day 5", getDayOffset(props.week, 5));
-
-  const getRemainingTime = (day: number) => {
-    return Math.max(
-      0,
-      props.totalMinutes -
-        getProgressUntilDay(props.week, day, false)
-    );
-  };
+  const [remainingByDay, setRemainingByDay] = useState<number[]>([
+    props.totalMinutes,
+    ...[1, 2, 3, 4, 5, 6, 7].map((day: number): number => {
+      return getRemainingTime(props.week, day, props.totalMinutes);
+    }),
+  ]);
 
   const getRemainingPercentage = (day: number) => {
-    return ((getRemainingTime(day) / props.totalMinutes) * 100).toFixed(2);
+    return (
+      (getRemainingTime(props.week, day, props.totalMinutes) /
+        props.totalMinutes) *
+      100
+    ).toFixed(2);
   };
 
   const renderOverview = () => {
@@ -84,7 +79,7 @@ export default function WeekReport(props: Props): ReactElement {
                   {getProgressOnDay(props.week, day, false)} minutes
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {getRemainingTime(day)} minutes
+                  {remainingByDay[day]} minutes
                 </StyledTableCell>
                 <StyledTableCell align="left">
                   {getRemainingPercentage(day)}%
