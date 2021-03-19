@@ -1,14 +1,15 @@
 interface Base {
   id?: string;
-  userId?: string;
 }
 
 export interface Week extends Base {
+  userId: string;
   weekNumber: number;
   goals: Goal[];
 }
 
 export interface Goal extends Base {
+  userId: string;
   name: string;
   tasks: Task[];
 }
@@ -38,4 +39,10 @@ export interface Overview {
   progress: number;
   remaining: number;
   offset?: number;
+}
+
+export interface Tag extends Base {
+  userId: string;
+  name: string;
+  color: string;
 }

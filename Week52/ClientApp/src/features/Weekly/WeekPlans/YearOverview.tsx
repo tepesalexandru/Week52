@@ -49,7 +49,6 @@ export default function YearOverview({}: Props): ReactElement {
             variant="contained"
             className={classes.week}
             onClick={() => {
-              // set id as well
               dispatch(setSelectedWeek({ weekSelected: i + 1, weekId: "" }));
               history.push(`/week-plan/${i + 1}`);
             }}
@@ -67,6 +66,14 @@ export default function YearOverview({}: Props): ReactElement {
       <div className={classes.header}>
         <p className={classes.title}>Year overview</p>
         <div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => history.push("/dashboard")}
+            style={{ marginRight: 16 }}
+          >
+            Analytics
+          </Button>
           <Button
             variant="contained"
             color="primary"

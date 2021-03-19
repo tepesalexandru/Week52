@@ -4,9 +4,9 @@ import CreateGoal from "../../features/Weekly/WeekPlans/CreateGoal";
 import YearOverview from "../../features/Weekly/WeekPlans/YearOverview";
 import WeekPlan from "../../features/Weekly/WeekPlans/WeekPlan";
 import AddProgress from "../../features/Weekly/Goals/AddProgress";
-import DayOverview from "../../features/Weekly/Goals/DayOverview";
 import Landing from "../../features/Login/Landing";
 import CreateUser from "../../features/Login/CreateUser";
+import Dashboard from '../../features/Analytics/Dashboard';
 
 export const routes = [
   {
@@ -43,6 +43,10 @@ export const routes = [
     path: "/add-progress",
     component: AddProgress,
   },
+  {
+    path: "/dashboard",
+    component: Dashboard
+  }
   // {
   //   path: "/week/day/:dayNumber",
   //   component: DayOverview,

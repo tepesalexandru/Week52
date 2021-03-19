@@ -18,7 +18,7 @@ namespace Week52.DataAccess.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TaskTags>().HasKey(sc => new { sc.TaskId, sc.TagId });
+            //modelBuilder.Entity<TaskTags>().HasKey(sc => new { sc.TaskId, sc.TagId });
         }
 
         public DbSet<BasicWeek> Weeks { get; set; }
@@ -26,6 +26,6 @@ namespace Week52.DataAccess.Context
         public DbSet<BasicGoal> Goals { get; set; }
         public DbSet<BasicTask> Tasks { get; set; }
         public DbSet<Progress> Progress { get; set; }
-        public DbSet<TaskTags> TaskTags { get; set; }
+        public DbSet<BasicTag> Tags { get; set; }
     }
 }

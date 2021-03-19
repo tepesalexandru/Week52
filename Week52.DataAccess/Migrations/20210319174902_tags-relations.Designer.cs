@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Week52.DataAccess.Context;
 
 namespace Week52.DataAccess.Migrations
 {
     [DbContext(typeof(Week52DbContext))]
-    partial class Week52DbContextModelSnapshot : ModelSnapshot
+    [Migration("20210319174902_tags-relations")]
+    partial class tagsrelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,12 +70,9 @@ namespace Week52.DataAccess.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("BasicTag");
                 });
 
             modelBuilder.Entity("Week52.DataAccess.Entities.BasicTask", b =>

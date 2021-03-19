@@ -1,0 +1,12 @@
+import axios from "axios";
+import { Tag } from "../../../shared/Interfaces";
+
+export const getTags = async (userId: string) => {
+  const response = await axios.get(`api/Tag/getByUserId/${userId}`);
+  return response.data;
+};
+
+export const createTag = async (tag: Tag) => {
+  const response = await axios.post(`api/Tag/create`, tag);
+  return response.data;
+};

@@ -12,10 +12,11 @@ namespace Week52.DataAccess.Entities
     {
         public BasicTag()
         {
-            Tasks = new List<TaskTags>();
+            Tasks = new List<BasicTask>();
         }
+        public Guid UserId { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-        public ICollection<TaskTags> Tasks { get; set; }
+        public ICollection<BasicTask> Tasks { get; set; }
     }
 }
