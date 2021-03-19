@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Week52.DataAccess.Entities.Relations;
 
 namespace Week52.DataAccess.Entities
 {
@@ -20,6 +21,7 @@ namespace Week52.DataAccess.Entities
         public BasicTask()
         {
             ProgressByDay = new List<Progress>();
+            Tags = new List<BasicTag>();
         }
         public string Name { get; set; }
         [ForeignKey("Goal")]
@@ -29,5 +31,6 @@ namespace Week52.DataAccess.Entities
         public virtual ICollection<Progress> ProgressByDay { get; set; } 
         public int DayCompleted { get; set; }
         public string Note { get; set; }
+        public virtual ICollection<BasicTag> Tags { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace Week52.DataAccess.Entities
         {
             Goals = new List<BasicGoal>();
         }
+        public Guid UserId { get; set; }
         public int WeekNumber { get; set; }
         public virtual ICollection<BasicGoal> Goals { get; set; }
     }

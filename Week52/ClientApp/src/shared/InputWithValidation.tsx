@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   inputField: {
     margin: "4px 0",
-    width: 300
+    width: 300,
   },
   label: {
     color: theme.palette.secondary.contrastText,
@@ -36,34 +36,32 @@ export default function InputWithValidation(props: Props): ReactElement {
   };
 
   const getLabel = () => {
-    if (props.label) return capitalize(props.label)
+    if (props.label) return capitalize(props.label);
     return capitalize(props.name);
   };
 
   return (
-    <div>
-      <Controller
-        control={props.formHook.control}
-        name={props.name}
-        rules={props.validation}
-        render={({ ref, value, onChange }) => (
-          <TextField
-            label={getLabel()}
-            inputRef={ref}
-            color="primary"
-            InputLabelProps={{
-              className: classes.label,
-            }}
-            inputProps={{
-              className: classes.input,
-            }}
-            className={classes.inputField}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            type={props.type || "text"}
-          />
-        )}
-      />
-    </div>
+    <Controller
+      control={props.formHook.control}
+      name={props.name}
+      rules={props.validation}
+      render={({ ref, value, onChange }) => (
+        <TextField
+          label={getLabel()}
+          inputRef={ref}
+          color="primary"
+          InputLabelProps={{
+            className: classes.label,
+          }}
+          inputProps={{
+            className: classes.input,
+          }}
+          className={classes.inputField}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          type={props.type || "text"}
+        />
+      )}
+    />
   );
 }
