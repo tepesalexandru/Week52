@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, useHistory } from "react-router";
 import { ApplicationState } from "../../../app/store";
 import WeekSidebar from "./WeekSidebar";
-import { Goal, Task, Week } from "../../../shared/Interfaces";
+import { Goal, Tag, Task, Week } from "../../../shared/Interfaces";
 import DayOverview from "./DayOverview";
 import WeekReport from "./WeekReport";
 import { useStyles } from "./Styles/WeeklyGoals";
@@ -12,6 +12,7 @@ import CheckIcon from "@material-ui/icons/CheckCircle";
 import { getAllTaskProgress, getRemainingTime } from "./Helpers/_taskHelpers";
 import NoteDialog from "./NoteDialog";
 import Burndown from "./Burndown";
+import TagChip from "../../../shared/TagChip";
 
 interface Props {}
 
@@ -33,6 +34,19 @@ export default function WeeklyGoals(props: Props): ReactElement {
       }),
     ]);
   }, [totalMinutes]);
+
+  const renderTags = (task: Task) => {
+    return task.tags.map((tag: Tag) => {
+      return (
+        <TagChip
+          key={`${task.id}-${tag.id}`}
+          color={tag.color}
+          name={tag.name}
+          styles={{margin: "0 8px"}}
+        />
+      );
+    });
+  };
 
   useEffect(() => {
     let minutes = 0;
@@ -62,6 +76,7 @@ export default function WeeklyGoals(props: Props): ReactElement {
             <div>
               <span>{task.name}</span>
               <span className={classes.noteIcon}>{renderNoteIcon(task)}</span>
+              {renderTags(task)}
             </div>
             <div>
               <span>

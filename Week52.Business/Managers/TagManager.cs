@@ -12,6 +12,7 @@ namespace Week52.Business.Managers
     {
         List<BasicTag> GetTags(Guid UserId);
         BasicTag Create(BasicTag tag);
+        BasicTag AssignTag(Guid TaskId, BasicTag tag);
     }
     public class TagManager : ITagManager
     {
@@ -20,6 +21,12 @@ namespace Week52.Business.Managers
         {
             _tagRepository = tagRepository;
         }
+
+        public BasicTag AssignTag(Guid TaskId, BasicTag tag)
+        {
+            return _tagRepository.AssignTag(TaskId, tag);
+        }
+
         public BasicTag Create(BasicTag tag)
         {
             return _tagRepository.Create(tag);

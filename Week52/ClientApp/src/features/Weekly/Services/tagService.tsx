@@ -10,3 +10,8 @@ export const createTag = async (tag: Tag) => {
   const response = await axios.post(`api/Tag/create`, tag);
   return response.data;
 };
+
+export const assignTag = async (taskId: string, tag: Tag) => {
+  const response = await axios.post(`api/Tag/assignTo/${taskId}`, tag);
+  return response.data;
+};

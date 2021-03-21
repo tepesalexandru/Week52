@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace Week52.DataAccess.Repositories
     {
         List<BasicTag> GetTags(Guid UserId);
         BasicTag Create(BasicTag tag);
+        BasicTag AssignTag(Guid TaskId, BasicTag tag);
     }
     public class TagRepository : ITagRepository
     {
@@ -20,6 +22,15 @@ namespace Week52.DataAccess.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public BasicTag AssignTag(Guid TaskId, BasicTag tag)
+        {
+            var task = _dbContext.Tasks.Include(x => x.Tags).FirstOrDefault(x => x.Id == TaskId);
+            task.Tags.Add(tag);
+            _dbContext.SaveChanges();
+            return tag;
+        }
+
         public BasicTag Create(BasicTag tag)
         {
             _dbContext.Tags.Add(tag);

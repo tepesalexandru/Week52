@@ -33,5 +33,12 @@ namespace Week52.WebAPI.Controllers
             return Ok(_tagManager.Create(tag));
         }
 
+        [HttpPost]
+        [Route("assignTo/{TaskId}")]
+        public IActionResult Assign(Guid TaskId, BasicTag tag)
+        {
+            return Ok(_tagManager.AssignTag(TaskId, tag));
+        }
+
     }
 }
