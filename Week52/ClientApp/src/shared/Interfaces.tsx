@@ -20,6 +20,7 @@ export interface Task extends Base {
   progressByDay: Progress[];
   dayCompleted: number;
   note: string;
+  tags: Tag[]
 }
 
 export interface Progress extends Base {
@@ -35,7 +36,6 @@ export interface User extends Base {
 export interface Overview {
   goalName: string;
   task: Task;
-  // taskName: string;
   progress: number;
   remaining: number;
   offset?: number;

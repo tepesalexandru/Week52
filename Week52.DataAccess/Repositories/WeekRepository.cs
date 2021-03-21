@@ -49,6 +49,9 @@ namespace Week52.DataAccess.Repositories
                 .Include(x => x.Goals)
                 .ThenInclude(x => x.Tasks)
                 .ThenInclude(x => x.ProgressByDay)
+                .Include(x => x.Goals)
+                .ThenInclude(x => x.Tasks)
+                .ThenInclude(x => x.Tags)
                 .FirstOrDefault(x => x.UserId == UserId && x.WeekNumber == weekNumber);
             return week;
         }

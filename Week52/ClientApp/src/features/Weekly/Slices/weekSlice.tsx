@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { Progress, Task, Week } from "../../../shared/Interfaces";
+import { Progress, Tag, Task, Week } from "../../../shared/Interfaces";
 import { deleteGoal } from "../Services/goalService";
+import { assignTag } from "../Services/tagService";
 import {
   addProgress,
   completeTask,
@@ -45,6 +46,14 @@ export const _updateNote = createAsyncThunk(
   "week/updateNote",
   (params: { taskId: string; note: string }) => {
     return updateNote(params.taskId, params.note);
+  }
+);
+
+export const _assignTag = createAsyncThunk(
+  "week/assignTag",
+  async (params: { taskId: string; tag: Tag }) => {
+    await assignTag(params.taskId, params.tag);
+    return { taskId: params.taskId, tag: params.tag };
   }
 );
 
@@ -97,6 +106,19 @@ export const weekSlice = createSlice({
           for (let j = 0; j < state.goals[i].tasks.length; j++) {
             if (state.goals[i].tasks[j].id === action.payload.id) {
               state.goals[i].tasks[j].note = action.payload.note;
+            }
+          }
+        }
+        return state;
+      }
+    );
+    builder.addCase(
+      _assignTag.fulfilled,
+      (state: Week, action: { payload: { taskId: string; tag: Tag } }) => {
+        for (let i = 0; i < state.goals.length; i++) {
+          for (let j = 0; j < state.goals[i].tasks.length; j++) {
+            if (state.goals[i].tasks[j].id === action.payload.taskId) {
+              state.goals[i].tasks[j].tags.push(action.payload.tag);
             }
           }
         }

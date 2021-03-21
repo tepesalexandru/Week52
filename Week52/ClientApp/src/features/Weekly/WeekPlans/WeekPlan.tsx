@@ -1,57 +1,15 @@
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { ApplicationState } from "../../../app/store";
-import { makeStyles } from "@material-ui/core";
-import { Goal, Task } from "../../../shared/Interfaces";
+import { useStyles } from "./Styles/WeekPlanStyles";
+import { Goal, Tag, Task } from "../../../shared/Interfaces";
 import { _deleteGoal, _deleteTask, _fetchWeek } from "../Slices/weekSlice";
-
-const useStyles = makeStyles((theme) => ({
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: theme.palette.secondary.contrastText,
-    marginBottom: 0,
-  },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "16px 24px",
-    background: theme.palette.secondary.main,
-    marginBottom: 36,
-  },
-  body: {
-    width: "80%",
-    margin: "auto",
-  },
-  goalRoot: {
-    background: theme.palette.secondary.main,
-    borderRadius: 12,
-    padding: "12px 24px",
-    margin: "8px 0",
-    color: theme.palette.secondary.contrastText,
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  taskRoot: {
-    display: "flex",
-    justifyContent: "flex-end",
-  },
-  taskBody: {
-    background: theme.palette.secondary.main,
-    borderRadius: 12,
-    padding: "12px 24px",
-    margin: "8px 0",
-    color: theme.palette.secondary.contrastText,
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "95%",
-  },
-}));
+import AddIcon from "@material-ui/icons/Add";
+import { getTags } from "../Services/tagService";
+import TagChip from "../../../shared/TagChip";
+import TagTooltip from "./TagTooltip";
 
 interface Props {}
 
@@ -69,6 +27,7 @@ export default function WeekPlan({}: Props): ReactElement {
   const goals = useSelector((state: ApplicationState) => state.week.goals);
   const [totalMinutes, setTotalMinutes] = useState<number>(0);
   const [totalHours, setTotalHours] = useState<number>(0);
+  const [allTags, setAllTags] = useState<Tag[]>([]);
   useEffect(() => {
     dispatch(
       _fetchWeek({
@@ -76,6 +35,9 @@ export default function WeekPlan({}: Props): ReactElement {
         weekNumber: weekNumber || params.weekNumber,
       })
     );
+    getTags(userId).then((data: Tag[]) => {
+      setAllTags(data);
+    });
   }, [userId]);
 
   useEffect(() => {
@@ -89,12 +51,33 @@ export default function WeekPlan({}: Props): ReactElement {
     setTotalHours(+(neededMinutes / 60).toFixed(2));
   }, [JSON.stringify(goals)]);
 
+  const renderAddTag = (task: Task) => {
+    return <TagTooltip allTags={allTags} taskId={task.id} />;
+  };
+
+  const renderTags = (task: Task) => {
+    return task.tags.map((tag: Tag) => {
+      return (
+        <TagChip
+          key={`${task.id}-${tag.id}`}
+          color={tag.color}
+          name={tag.name}
+          styles={{margin: "0 8px"}}
+        />
+      );
+    });
+  };
+
   const renderTasks = (tasks: Task[]) => {
     return tasks.map((task) => {
       return (
         <div key={task.id} className={classes.taskRoot}>
           <div className={classes.taskBody}>
-            <span>{task.name}</span>
+            <div style={{ display: "flex", alignItems: 'center' }}>
+              <span>{task.name}</span>
+              {renderTags(task)}
+              {renderAddTag(task)}
+            </div>
             <div>
               <span>{task.estimation} minutes</span>
               <Button
