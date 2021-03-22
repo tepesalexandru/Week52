@@ -6,6 +6,11 @@ export const getTags = async (userId: string) => {
   return response.data;
 };
 
+export const getProgressOnAllTags = async (userId: string) => {
+  const response = await axios.get(`api/Tag/getProgressOnAll/${userId}`);
+  return response.data;
+};
+
 export const createTag = async (tag: Tag) => {
   const response = await axios.post(`api/Tag/create`, tag);
   return response.data;

@@ -14,6 +14,7 @@ namespace Week52.Business.Managers
         BasicTag Create(BasicTag tag);
         BasicTag AssignTag(Guid TaskId, BasicTag tag);
         Guid RemoveTag(Guid TaskId, BasicTag tag);
+        List<TagProgress> GetProgressOnTags(Guid UserId);
     }
     public class TagManager : ITagManager
     {
@@ -36,6 +37,11 @@ namespace Week52.Business.Managers
         public List<BasicTag> GetTags(Guid UserId)
         {
             return _tagRepository.GetTags(UserId);
+        }
+
+        public List<TagProgress> GetProgressOnTags(Guid UserId)
+        {
+            return _tagRepository.GetProgressOnTags(UserId);
         }
 
         public Guid RemoveTag(Guid TaskId, BasicTag tag)
