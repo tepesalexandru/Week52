@@ -13,6 +13,7 @@ namespace Week52.Business.Managers
         List<BasicTag> GetTags(Guid UserId);
         BasicTag Create(BasicTag tag);
         BasicTag AssignTag(Guid TaskId, BasicTag tag);
+        Guid RemoveTag(Guid TaskId, BasicTag tag);
     }
     public class TagManager : ITagManager
     {
@@ -35,6 +36,11 @@ namespace Week52.Business.Managers
         public List<BasicTag> GetTags(Guid UserId)
         {
             return _tagRepository.GetTags(UserId);
+        }
+
+        public Guid RemoveTag(Guid TaskId, BasicTag tag)
+        {
+            return _tagRepository.RemoveTag(TaskId, tag);
         }
     }
 

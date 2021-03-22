@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Progress, Tag, Task, Week } from "../../../shared/Interfaces";
 import { deleteGoal } from "../Services/goalService";
-import { assignTag } from "../Services/tagService";
+import { assignTag, removeTag } from "../Services/tagService";
 import {
   addProgress,
   completeTask,
@@ -53,6 +53,14 @@ export const _assignTag = createAsyncThunk(
   "week/assignTag",
   async (params: { taskId: string; tag: Tag }) => {
     await assignTag(params.taskId, params.tag);
+    return { taskId: params.taskId, tag: params.tag };
+  }
+);
+
+export const _removeTag = createAsyncThunk(
+  "week/removeTag",
+  async (params: { taskId: string; tag: Tag }) => {
+    await removeTag(params.taskId, params.tag);
     return { taskId: params.taskId, tag: params.tag };
   }
 );
@@ -119,6 +127,23 @@ export const weekSlice = createSlice({
           for (let j = 0; j < state.goals[i].tasks.length; j++) {
             if (state.goals[i].tasks[j].id === action.payload.taskId) {
               state.goals[i].tasks[j].tags.push(action.payload.tag);
+            }
+          }
+        }
+        return state;
+      }
+    );
+    builder.addCase(
+      _removeTag.fulfilled,
+      (state: Week, action: { payload: { taskId: string; tag: Tag } }) => {
+        for (let i = 0; i < state.goals.length; i++) {
+          for (let j = 0; j < state.goals[i].tasks.length; j++) {
+            if (state.goals[i].tasks[j].id === action.payload.taskId) {
+              state.goals[i].tasks[j].tags = state.goals[i].tasks[
+                j
+              ].tags.filter((tag: Tag) => {
+                return tag.id !== action.payload.tag.id;
+              });
             }
           }
         }

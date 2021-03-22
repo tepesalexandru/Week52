@@ -15,3 +15,8 @@ export const assignTag = async (taskId: string, tag: Tag) => {
   const response = await axios.post(`api/Tag/assignTo/${taskId}`, tag);
   return response.data;
 };
+
+export const removeTag = async (taskId: string, tag: Tag) => {
+  const response = await axios.patch(`api/Tag/removeFrom/${taskId}`, tag);
+  return response.data;
+};

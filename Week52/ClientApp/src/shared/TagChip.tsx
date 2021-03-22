@@ -6,7 +6,7 @@ interface Props {
   color: string;
   onClick?: Function;
   styles?: any;
-  onDelete?: Function
+  onDelete?: Function;
 }
 
 const useStyles = makeStyles({
@@ -26,14 +26,14 @@ export default function TagChip(props: Props): ReactElement {
       className={classes.chip}
       style={{
         backgroundColor: props.color,
-        ...props.styles
+        ...props.styles,
       }}
       onClick={() => {
         if (props.onClick) {
           props.onClick();
         }
       }}
-      {...props.onDelete}
+      onDelete={props.onDelete ? () => props.onDelete() : null}
     />
   );
 }
