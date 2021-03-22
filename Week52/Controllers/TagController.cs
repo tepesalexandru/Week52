@@ -40,5 +40,12 @@ namespace Week52.WebAPI.Controllers
             return Ok(_tagManager.AssignTag(TaskId, tag));
         }
 
+        [HttpPatch]
+        [Route("removeFrom/{TaskId}")]
+        public IActionResult Remove(Guid TaskId, BasicTag tag)
+        {
+            return Ok(_tagManager.RemoveTag(TaskId, tag));
+        }
+
     }
 }

@@ -14,6 +14,7 @@ namespace Week52.DataAccess.Repositories
         List<BasicTag> GetTags(Guid UserId);
         BasicTag Create(BasicTag tag);
         BasicTag AssignTag(Guid TaskId, BasicTag tag);
+        Guid RemoveTag(Guid TaskId, BasicTag tag);
     }
     public class TagRepository : ITagRepository
     {
@@ -42,6 +43,15 @@ namespace Week52.DataAccess.Repositories
         {
             var tags = _dbContext.Tags.Where(x => x.UserId == UserId).ToList();
             return tags;
+        }
+
+        public Guid RemoveTag(Guid TaskId, BasicTag tag)
+        {
+            var task = _dbContext.Tasks.Include(x => x.Tags).FirstOrDefault(x => x.Id == TaskId);
+            BasicTag tagToRemove = task.Tags.FirstOrDefault(x => x.Id == tag.Id);
+            task.Tags.Remove(tagToRemove);
+            _dbContext.SaveChanges();
+            return tag.Id;
         }
     }
 

@@ -5,7 +5,12 @@ import { useHistory, useParams } from "react-router";
 import { ApplicationState } from "../../../app/store";
 import { useStyles } from "./Styles/WeekPlanStyles";
 import { Goal, Tag, Task } from "../../../shared/Interfaces";
-import { _deleteGoal, _deleteTask, _fetchWeek } from "../Slices/weekSlice";
+import {
+  _deleteGoal,
+  _deleteTask,
+  _fetchWeek,
+  _removeTag,
+} from "../Slices/weekSlice";
 import AddIcon from "@material-ui/icons/Add";
 import { getTags } from "../Services/tagService";
 import TagChip from "../../../shared/TagChip";
@@ -62,7 +67,10 @@ export default function WeekPlan({}: Props): ReactElement {
           key={`${task.id}-${tag.id}`}
           color={tag.color}
           name={tag.name}
-          styles={{margin: "0 8px"}}
+          styles={{ margin: "0 8px" }}
+          onDelete={() => {
+            dispatch(_removeTag({ taskId: task.id, tag: tag }));
+          }}
         />
       );
     });
@@ -73,7 +81,7 @@ export default function WeekPlan({}: Props): ReactElement {
       return (
         <div key={task.id} className={classes.taskRoot}>
           <div className={classes.taskBody}>
-            <div style={{ display: "flex", alignItems: 'center' }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <span>{task.name}</span>
               {renderTags(task)}
               {renderAddTag(task)}
