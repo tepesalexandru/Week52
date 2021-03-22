@@ -25,6 +25,13 @@ namespace Week52.WebAPI.Controllers
         {
             return Ok(_tagManager.GetTags(UserId));
         }
+        [HttpGet]
+        [Route("getProgressOnAll/{UserId}")]
+        public IActionResult GetProgressOnAllTags(Guid UserId)
+        {
+            return Ok(_tagManager.GetProgressOnTags(UserId));
+        }
+
 
         [HttpPost]
         [Route("create")]

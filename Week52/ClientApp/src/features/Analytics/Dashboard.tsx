@@ -6,6 +6,7 @@ import { Tag } from "../../shared/Interfaces";
 import { getTags } from "../Weekly/Services/tagService";
 import CreateTag from "./CreateTag";
 import { _getTags } from "./slices/analyticSlice";
+import TagsBarChart from "./TagsBarChart";
 
 interface Props {}
 
@@ -24,7 +25,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function Dashboard({}: Props): ReactElement {
   const classes = useStyles();
   const dispatch = useDispatch();
-  //   const [tags, setTags] = useState<Tag[]>([]);
   const tags =
     useSelector((state: ApplicationState) => state.analytics.tags) || [];
   const userId = useSelector(
@@ -52,6 +52,7 @@ export default function Dashboard({}: Props): ReactElement {
 
   return (
     <div className={classes.root}>
+      <TagsBarChart tags={tags} userId={userId}/>
       <CreateTag />
       <p style={{ color: "white", fontWeight: "bold", fontSize: 24 }}>
         Your Tags:
