@@ -10,7 +10,7 @@ import {
   Theme,
   withStyles,
 } from "@material-ui/core";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { Week } from "../../../shared/Interfaces";
 import { getProgressOnDay, getRemainingTime } from "./Helpers/_taskHelpers";
 
@@ -92,5 +92,5 @@ export default function WeekReport(props: Props): ReactElement {
     );
   };
 
-  return <div>{renderOverview()}</div>;
+  return <div>{renderOverview()} </div>;
 }

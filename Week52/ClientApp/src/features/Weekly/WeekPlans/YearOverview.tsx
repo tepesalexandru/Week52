@@ -62,27 +62,7 @@ export default function YearOverview({}: Props): ReactElement {
   };
 
   return (
-    <div>
-      <div className={classes.header}>
-        <p className={classes.title}>Year overview</p>
-        <div>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => history.push("/dashboard")}
-            style={{ marginRight: 16 }}
-          >
-            Analytics
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => history.push("/week")}
-          >
-            Current Week
-          </Button>
-        </div>
-      </div>
+    <div style={{ marginTop: 24 }}>
       <div>
         <Grid container>{generateWeeks()}</Grid>
       </div>

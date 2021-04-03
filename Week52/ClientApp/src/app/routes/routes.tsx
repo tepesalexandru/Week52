@@ -45,10 +45,6 @@ export const routes = [
   },
   {
     path: "/dashboard",
-    component: Dashboard
-  }
-  // {
-  //   path: "/week/day/:dayNumber",
-  //   component: DayOverview,
-  // },
+    component: Dashboard,
+  },
 ];

@@ -1,11 +1,10 @@
-import { Chip, Theme, makeStyles } from "@material-ui/core";
-import React, { ReactElement, useEffect, useState } from "react";
+import { Theme, makeStyles } from "@material-ui/core";
+import React, { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Route } from "react-router";
 import { ApplicationState } from "../../app/store";
-import { Tag } from "../../shared/Interfaces";
-import { getTags } from "../Weekly/Services/tagService";
-import CreateTag from "./CreateTag";
 import { _getTags } from "./slices/analyticSlice";
+import Tags from "./Tags";
 import TagsBarChart from "./TagsBarChart";
 
 interface Props {}
@@ -13,12 +12,7 @@ interface Props {}
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: "0 60px",
-    paddingTop: 14,
-  },
-  chip: {
-    color: "white",
-    fontWeight: "bold",
-    marginRight: 14,
+    marginTop: 24,
   },
 }));
 
@@ -34,30 +28,14 @@ export default function Dashboard({}: Props): ReactElement {
     dispatch(_getTags(userId));
   }, []);
 
-  const renderTags = () => {
-    return tags.map((tag: Tag) => {
-      return (
-        <Chip
-          key={`tag-${tag.name}`}
-          label={tag.name}
-          variant="outlined"
-          className={classes.chip}
-          style={{
-            backgroundColor: tag.color,
-          }}
-        />
-      );
-    });
-  };
-
   return (
     <div className={classes.root}>
-      <TagsBarChart tags={tags} userId={userId}/>
-      <CreateTag />
-      <p style={{ color: "white", fontWeight: "bold", fontSize: 24 }}>
-        Your Tags:
-      </p>
-      {renderTags()}
+      <Route path="/dashboard/analytics">
+        <TagsBarChart tags={tags} userId={userId} />
+      </Route>
+      <Route path="/dashboard/tags">
+        <Tags tags={tags} />
+      </Route>
     </div>
   );
 }

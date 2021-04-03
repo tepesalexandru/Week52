@@ -3,10 +3,11 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    color: theme.palette.secondary.contrastText,
-    padding: "2px 24px",
+    color: theme.palette.secondary.main,
+    padding: "6px 24px",
     "&:hover": {
       backgroundColor: theme.palette.primary.main,
+      color: "#fff",
       cursor: "pointer",
       opacity: 0.8,
     },

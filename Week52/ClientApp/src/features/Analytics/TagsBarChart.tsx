@@ -4,7 +4,6 @@ import {
   BarChart,
   CartesianGrid,
   Legend,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -30,10 +29,10 @@ export default function TagsBarChart(props: Props): ReactElement {
   useEffect(() => {
     getProgressOnAllTags(props.userId).then((data: TagProgress[]) => {
       function compare(a: TagProgress, b: TagProgress) {
-        if (b.totalEstimations === a.totalEstimations) {
-            return b.totalActive - a.totalActive;
+        if (b.totalActive === a.totalActive) {
+          return b.totalEstimations - a.totalEstimations;
         }
-        return b.totalEstimations - a.totalEstimations;
+        return b.totalActive - a.totalActive;
       }
       data.sort(compare);
       setProgressOnTags(data);
@@ -44,16 +43,16 @@ export default function TagsBarChart(props: Props): ReactElement {
       return {
         name: tagProgress.name,
         estimations: tagProgress.totalEstimations,
-        actual: tagProgress.totalActive
+        actual: tagProgress.totalActive,
       };
     });
   };
 
   return (
-    <div>
+    <div style={{ display: "flex", justifyContent: "center" }}>
       <BarChart
-        width={600}
-        height={300}
+        width={1200}
+        height={props.tags.length * 50}
         data={generateDate()}
         layout="vertical"
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
@@ -62,7 +61,7 @@ export default function TagsBarChart(props: Props): ReactElement {
         <YAxis type="category" dataKey="name" />
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip />
-        <Legend />
+        <Legend wrapperStyle={{ color: "white" }} />
         <Bar dataKey="estimations" fill="#8884d8" />
         <Bar dataKey="actual" fill="#82ca9d" />
       </BarChart>
