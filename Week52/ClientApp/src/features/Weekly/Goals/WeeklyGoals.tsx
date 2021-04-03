@@ -1,9 +1,7 @@
-import { Button } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, useHistory } from "react-router";
+import { Route, useLocation } from "react-router";
 import { ApplicationState } from "../../../app/store";
-import WeekSidebar from "./WeekSidebar";
 import { Goal, Tag, Task, Week } from "../../../shared/Interfaces";
 import DayOverview from "./DayOverview";
 import WeekReport from "./WeekReport";
@@ -13,13 +11,14 @@ import { getAllTaskProgress, getRemainingTime } from "./Helpers/_taskHelpers";
 import NoteDialog from "./NoteDialog";
 import Burndown from "./Burndown";
 import TagChip from "../../../shared/TagChip";
+import { setNavbarTitle } from "../Slices/metadataSlice";
 
 interface Props {}
 
 export default function WeeklyGoals(props: Props): ReactElement {
-  const dispatch = useDispatch();
-  const history = useHistory();
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const location = useLocation();
   const currentWeek: Week = useSelector(
     (state: ApplicationState) => state.week
   );
@@ -42,7 +41,7 @@ export default function WeeklyGoals(props: Props): ReactElement {
           key={`${task.id}-${tag.id}`}
           color={tag.color}
           name={tag.name}
-          styles={{margin: "0 8px"}}
+          styles={{ margin: "0 8px" }}
         />
       );
     });
@@ -57,6 +56,17 @@ export default function WeeklyGoals(props: Props): ReactElement {
     });
     setTotalMinutes(minutes);
   }, [JSON.stringify(currentWeek.goals)]);
+
+  useEffect(() => {
+    if (location.pathname !== "/week/overview") return;
+    dispatch(
+      setNavbarTitle({
+        title: `Week Overview - ${totalMinutes} minutes (${(
+          totalMinutes / 60
+        ).toFixed(2)} hours)`,
+      })
+    );
+  }, [location.pathname, totalMinutes]);
 
   const renderTasks = (tasks: Task[]) => {
     const renderCompletedMark = (dayCompleted: number) => {
@@ -106,30 +116,7 @@ export default function WeeklyGoals(props: Props): ReactElement {
 
   return (
     <div>
-      <div className={classes.header}>
-        <p className={classes.title}>
-          Your tasks for this Week - {totalMinutes} minutes (
-          {(totalMinutes / 60).toFixed(2)} hours)
-        </p>
-        <div>
-          <div>
-            <Burndown
-              totalMinutes={totalMinutes}
-              remainingByDay={remainingByDay}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => history.push("/year-overview")}
-              style={{ marginLeft: 16 }}
-            >
-              Year Overview
-            </Button>
-          </div>
-        </div>
-      </div>
       <div className={classes.bodyRoot}>
-        <WeekSidebar />
         <div className={classes.view}>
           <Route path="/week/overview">
             <div>{renderGoals()}</div>
@@ -142,6 +129,7 @@ export default function WeeklyGoals(props: Props): ReactElement {
           </Route>
         </div>
       </div>
+      <Burndown totalMinutes={totalMinutes} remainingByDay={remainingByDay} />
     </div>
   );
 }

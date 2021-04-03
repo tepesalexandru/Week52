@@ -9,6 +9,8 @@ import { getWeekNumber } from "../features/Helpers";
 import { setCurrentWeek } from "../features/Weekly/Slices/metadataSlice";
 import { _fetchWeek } from "../features/Weekly/Slices/weekSlice";
 import { ApplicationState } from "./store";
+import { useLocation } from "react-router";
+import NavigationBar from "../shared/NavigationBar";
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
@@ -17,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default () => {
+  const location = useLocation();
   const classes = useStyles();
   const dispatch = useDispatch();
   const userId = useSelector(
@@ -31,9 +34,18 @@ export default () => {
     }
   }, [userId]);
 
+  const renderNavigationBar = () => {
+    if (location.pathname !== "/") {
+      return <NavigationBar />;
+    }
+  };
+
   return (
     <div className={classes.root}>
-      <Layout>{RenderComponentRoutes(routes)}</Layout>
+      <Layout>
+        {renderNavigationBar()}
+        {RenderComponentRoutes(routes)}
+      </Layout>
     </div>
   );
 };

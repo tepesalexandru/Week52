@@ -7,6 +7,7 @@ export interface MetadataState {
   weekId: string;
   userId: string;
   userName: string;
+  navbarTitle: string;
 }
 
 const INITIAL_STATE: MetadataState = {
@@ -16,6 +17,7 @@ const INITIAL_STATE: MetadataState = {
   weekId: "",
   userId: "",
   userName: "",
+  navbarTitle: "Week Overview",
 };
 
 export const metadataSlice = createSlice({
@@ -39,6 +41,9 @@ export const metadataSlice = createSlice({
     setDaySelected: (state, action) => {
       state.daySelected = action.payload;
     },
+    setNavbarTitle: (state, action: { payload: { title: string } }) => {
+      state.navbarTitle = action.payload.title;
+    },
   },
 });
 
@@ -47,4 +52,5 @@ export const {
   setCurrentWeek,
   setDaySelected,
   setUser,
+  setNavbarTitle
 } = metadataSlice.actions;

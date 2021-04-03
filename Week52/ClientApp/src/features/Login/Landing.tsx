@@ -52,7 +52,7 @@ export default function Landing({}: Props): ReactElement {
 
   const handleSubmit = formHook.handleSubmit((data) => {
     dispatch(setUser({ userId: data.userId }));
-    history.push("/week");
+    history.push("/week/overview");
   });
 
   return (

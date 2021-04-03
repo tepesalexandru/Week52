@@ -1,4 +1,4 @@
-import { Button, Tooltip } from "@material-ui/core";
+import { Button, Fab, Tooltip } from "@material-ui/core";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
@@ -15,6 +15,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { getTags } from "../Services/tagService";
 import TagChip from "../../../shared/TagChip";
 import TagTooltip from "./TagTooltip";
+import { setNavbarTitle } from "../Slices/metadataSlice";
 
 interface Props {}
 
@@ -55,6 +56,14 @@ export default function WeekPlan({}: Props): ReactElement {
     setTotalMinutes(neededMinutes);
     setTotalHours(+(neededMinutes / 60).toFixed(2));
   }, [JSON.stringify(goals)]);
+
+  useEffect(() => {
+    dispatch(
+      setNavbarTitle({
+        title: `Week ${weekNumber} - ${totalMinutes} minutes (${totalHours} hours)`,
+      })
+    );
+  }, [totalMinutes]);
 
   const renderAddTag = (task: Task) => {
     return <TagTooltip allTags={allTags} taskId={task.id} />;
@@ -134,30 +143,18 @@ export default function WeekPlan({}: Props): ReactElement {
   };
 
   return (
-    <div>
-      <div className={classes.header}>
-        <p className={classes.title}>
-          Your tasks for this Week - {totalMinutes} minutes ({totalHours} hours)
-        </p>
-        <div>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => history.push("/create-goal")}
-          >
-            Create Goal
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => history.push("/year-overview")}
-            style={{ marginLeft: 16 }}
-          >
-            Year Overview
-          </Button>
-        </div>
-      </div>
+    <div style={{ marginTop: 24 }}>
       <div className={classes.body}>{renderGoals()}</div>
+      <div
+        style={{ position: "fixed", bottom: 24, right: 24 }}
+        onClick={() => history.push("/create-goal")}
+      >
+        <Tooltip title="Add Goal">
+          <Fab color="primary" aria-label="add">
+            <AddIcon />
+          </Fab>
+        </Tooltip>
+      </div>
     </div>
   );
 }

@@ -1,10 +1,11 @@
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Fab,
 } from "@material-ui/core";
+import MaterialTooltip from '@material-ui/core/Tooltip';
 import React, { ReactElement } from "react";
 import {
   Area,
@@ -16,6 +17,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import TimelineIcon from "@material-ui/icons/Timeline";
 
 interface Props {
   totalMinutes: number;
@@ -46,20 +48,21 @@ export default function Burndown(props: Props): ReactElement {
 
   return (
     <React.Fragment>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => handleClickOpen()}
-        style={{ marginLeft: 16 }}
+      <div
+        style={{ position: "fixed", bottom: 24, right: 24 }}
+        onClick={handleClickOpen}
       >
-        Burndown
-      </Button>
+        <MaterialTooltip title="Burndown">
+          <Fab color="primary" aria-label="add">
+            <TimelineIcon />
+          </Fab>
+        </MaterialTooltip>
+      </div>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        // fullWidth={true}
         maxWidth="md"
       >
         <DialogTitle id="alert-dialog-title">{`Burndown Trend`}</DialogTitle>

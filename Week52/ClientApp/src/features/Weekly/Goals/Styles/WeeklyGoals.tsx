@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core";
 export const useStyles = makeStyles((theme) => ({
   bodyRoot: {
     display: "flex",
+    justifyContent: "center",
   },
   title: {
     fontSize: 24,
