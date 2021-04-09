@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Tag } from "../../shared/Interfaces";
 import { ApplicationState } from "../../app/store";
-import { createTag } from "../Weekly/Services/tagService";
 import InputWithValidation from "../../shared/InputWithValidation";
 import { CirclePicker } from "react-color";
 import { Button, Chip, Theme } from "@material-ui/core";
@@ -38,9 +37,8 @@ export default function CreateTag({}: Props): ReactElement {
   const formHook = useForm();
   const [colorPicked, setColorPicked] = useState<string>("");
   const [tagLabel, setTagLabel] = useState<string>("");
-  const userId = useSelector(
-    (state: ApplicationState) => state.metadata.userId
-  );
+  const userId =
+    useSelector((state: ApplicationState) => state.auth?.user?.id) || "";
 
   useEffect(() => {
     setTagLabel(formHook.getValues("name"));

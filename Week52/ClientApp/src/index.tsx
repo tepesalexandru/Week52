@@ -9,6 +9,8 @@ import App from "./app/App";
 import { Router } from "react-router";
 import configureStore, { createReducerManager, reducers } from "./app/store";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -35,14 +37,17 @@ const history = createBrowserHistory({ basename: baseUrl });
 const reducerManager = createReducerManager(reducers);
 let store: any = configureStore(reducerManager.reduce);
 store.reducerManager = reducerManager;
+let persistor = persistStore(store);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history}>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </Router>
+    <PersistGate loading={null} persistor={persistor}>
+      <Router history={history}>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </Router>
+    </PersistGate>
   </Provider>,
   document.getElementById("root")
 );

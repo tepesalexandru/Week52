@@ -22,8 +22,8 @@ export default function Dashboard({}: Props): ReactElement {
   const tags =
     useSelector((state: ApplicationState) => state.analytics.tags) || [];
   const userId = useSelector(
-    (state: ApplicationState) => state.metadata.userId
-  );
+    (state: ApplicationState) => state.auth?.user?.id
+  ) || "";
   useEffect(() => {
     dispatch(_getTags(userId));
   }, []);
