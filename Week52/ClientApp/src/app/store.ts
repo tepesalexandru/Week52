@@ -7,13 +7,18 @@ import {
 } from "../features/Weekly/Slices/metadataSlice";
 import { Week } from "../shared/Interfaces";
 import { weekSlice } from "../features/Weekly/Slices/weekSlice";
-import { analyticSlice, IAnalytics } from "../features/Analytics/slices/analyticSlice";
+import {
+  analyticSlice,
+  IAnalytics,
+} from "../features/Analytics/slices/analyticSlice";
+import { authSlice, IAuthState } from "./auth/authSlice";
 
 // The top-level state object
 export interface ApplicationState {
   metadata: MetadataState;
   week: Week;
-  analytics: IAnalytics
+  analytics: IAnalytics;
+  auth: IAuthState
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -22,7 +27,8 @@ export interface ApplicationState {
 export const reducers = {
   metadata: metadataSlice.reducer,
   week: weekSlice.reducer,
-  analytics: analyticSlice.reducer
+  analytics: analyticSlice.reducer,
+  auth: authSlice.reducer
 };
 
 export function createReducerManager(initialReducers: any) {
