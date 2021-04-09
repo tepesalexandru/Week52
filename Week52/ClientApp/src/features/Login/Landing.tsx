@@ -5,7 +5,7 @@ import { Button, makeStyles } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { getUsers } from "./userService";
 import { useDispatch } from "react-redux";
-import { setUser } from "../Weekly/Slices/metadataSlice";
+import { setUser, User } from "../../app/auth/authSlice";
 
 interface Props {}
 
@@ -51,7 +51,14 @@ export default function Landing({}: Props): ReactElement {
   }, []);
 
   const handleSubmit = formHook.handleSubmit((data) => {
-    dispatch(setUser({ userId: data.userId }));
+    const index = allUsers.findIndex((x) => x.id == data.userId);
+    const username = allUsers[index].name;
+    const user: User = {
+      id: data.userId,
+      username,
+    };
+    console.log("user", user);
+    dispatch(setUser(user));
     history.push("/week/overview");
   });
 

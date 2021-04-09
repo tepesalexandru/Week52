@@ -11,6 +11,7 @@ import { _fetchWeek } from "../features/Weekly/Slices/weekSlice";
 import { ApplicationState } from "./store";
 import { useLocation } from "react-router";
 import NavigationBar from "../shared/NavigationBar";
+import {useHistory} from 'react-router';
 const useStyles = makeStyles((theme) => ({
   root: {
     background: theme.palette.background.default,
@@ -22,11 +23,18 @@ export default () => {
   const location = useLocation();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
   const userId = useSelector(
-    (state: ApplicationState) => state.metadata.userId
-  );
+    (state: ApplicationState) => state.auth?.user?.id
+  ) || "";
 
+  console.log("hi", userId);
   useEffect(() => {
+    if (userId == "") {
+      history.push("/");
+      return;
+    }
+    
     const currentWeek = getWeekNumber(new Date());
     if (currentWeek !== 0 && userId) {
       dispatch(_fetchWeek({ userId: userId, weekNumber: currentWeek }));

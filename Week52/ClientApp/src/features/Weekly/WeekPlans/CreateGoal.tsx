@@ -39,9 +39,8 @@ export default function CreateGoal({}: Props): ReactElement {
   const weekNumber = useSelector(
     (state: ApplicationState) => state.metadata.weekSelected
   );
-  const userId = useSelector(
-    (state: ApplicationState) => state.metadata.userId
-  );
+  const userId =
+    useSelector((state: ApplicationState) => state.auth?.user?.id) || "";
   const onSubmit = (formValues: Goal) => {
     createGoal(weekNumber, { ...formValues, userId: userId }).then(
       history.goBack

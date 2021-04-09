@@ -1,28 +1,44 @@
 import { combineReducers } from "redux";
 import thunk from "redux-thunk";
 import { configureStore } from "@reduxjs/toolkit";
+import storageSession from "redux-persist/lib/storage/session";
+import { persistReducer } from "redux-persist";
 import {
   metadataSlice,
   MetadataState,
 } from "../features/Weekly/Slices/metadataSlice";
 import { Week } from "../shared/Interfaces";
 import { weekSlice } from "../features/Weekly/Slices/weekSlice";
-import { analyticSlice, IAnalytics } from "../features/Analytics/slices/analyticSlice";
+import {
+  analyticSlice,
+  IAnalytics,
+} from "../features/Analytics/slices/analyticSlice";
+import { authSlice, IAuthState } from "./auth/authSlice";
 
-// The top-level state object
 export interface ApplicationState {
   metadata: MetadataState;
   week: Week;
-  analytics: IAnalytics
+  analytics: IAnalytics;
+  auth: IAuthState;
 }
+
+const persistConfig = {
+  key: "root",
+  storage: storageSession,
+};
+
+const persistedAuthReducer = persistReducer(persistConfig, authSlice.reducer);
+
+// The top-level state object
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
 // the reducer with the matching name. It's important that the names match exactly, and that the reducer
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
+  auth: persistedAuthReducer,
   metadata: metadataSlice.reducer,
   week: weekSlice.reducer,
-  analytics: analyticSlice.reducer
+  analytics: analyticSlice.reducer,
 };
 
 export function createReducerManager(initialReducers: any) {

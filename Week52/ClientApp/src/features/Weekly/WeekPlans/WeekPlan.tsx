@@ -28,8 +28,8 @@ export default function WeekPlan({}: Props): ReactElement {
     (state: ApplicationState) => state.metadata.weekSelected
   );
   const userId = useSelector(
-    (state: ApplicationState) => state.metadata.userId
-  );
+    (state: ApplicationState) => state.auth?.user?.id
+  ) || "";
   const goals = useSelector((state: ApplicationState) => state.week.goals);
   const [totalMinutes, setTotalMinutes] = useState<number>(0);
   const [totalHours, setTotalHours] = useState<number>(0);
