@@ -27,7 +27,7 @@ export default function AddProgress(props: Props): ReactElement {
         taskId: formValues.taskId,
       })
     );
-    if (formHook.getValues('complete') === true) {
+    if (formHook.getValues("complete") === true) {
       dispatch(_completeTask({ taskId: formValues.taskId, day: props.day }));
     }
     props.onClick();
@@ -58,7 +58,9 @@ export default function AddProgress(props: Props): ReactElement {
             formHook={formHook}
             name="taskId"
             label="task"
-            // values={tasks.filter((task: Task) => task.completed === false)}
+            // values={tasks.filter(
+            //   (task: Task) => task.dayCompleted <= props.day
+            // )}
             values={tasks}
             validation={{ required: true }}
           />
