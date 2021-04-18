@@ -5,8 +5,8 @@ import {
   DialogTitle,
   Fab,
 } from "@material-ui/core";
-import MaterialTooltip from '@material-ui/core/Tooltip';
-import React, { ReactElement } from "react";
+import MaterialTooltip from "@material-ui/core/Tooltip";
+import React, { ReactElement, useEffect, useState } from "react";
 import {
   Area,
   CartesianGrid,
@@ -24,8 +24,13 @@ interface Props {
   remainingByDay: number[];
 }
 
+const generateRandomString = (): string => {
+  return Math.random().toString(36).substring(7);
+};
+
 export default function Burndown(props: Props): ReactElement {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [graphKey, setGraphKey] = useState<string>(generateRandomString());
   const getData = (): any[] => {
     return [0, 1, 2, 3, 4, 5, 6, 7].map((day: number) => {
       return {
@@ -45,6 +50,10 @@ export default function Burndown(props: Props): ReactElement {
   const handleClickOpen = () => {
     setOpen(true);
   };
+
+  useEffect(() => {
+    setGraphKey(generateRandomString());
+  }, [JSON.stringify(props.remainingByDay)]);
 
   return (
     <React.Fragment>
@@ -73,6 +82,7 @@ export default function Burndown(props: Props): ReactElement {
               height={250}
               data={getData()}
               margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              key={graphKey}
             >
               <defs>
                 <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">

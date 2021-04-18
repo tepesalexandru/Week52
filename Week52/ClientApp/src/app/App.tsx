@@ -28,7 +28,6 @@ export default () => {
     (state: ApplicationState) => state.auth?.user?.id
   ) || "";
 
-  console.log("hi", userId);
   useEffect(() => {
     if (userId == "") {
       history.push("/");
