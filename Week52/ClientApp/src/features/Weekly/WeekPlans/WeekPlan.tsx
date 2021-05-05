@@ -16,6 +16,7 @@ import { getTags } from "../Services/tagService";
 import TagChip from "../../../shared/TagChip";
 import TagTooltip from "./TagTooltip";
 import { setNavbarTitle } from "../Slices/metadataSlice";
+import Accordion from "../../../shared/components/Accordion";
 
 interface Props {}
 
@@ -27,9 +28,8 @@ export default function WeekPlan({}: Props): ReactElement {
   const weekNumber = useSelector(
     (state: ApplicationState) => state.metadata.weekSelected
   );
-  const userId = useSelector(
-    (state: ApplicationState) => state.auth?.user?.id
-  ) || "";
+  const userId =
+    useSelector((state: ApplicationState) => state.auth?.user?.id) || "";
   const goals = useSelector((state: ApplicationState) => state.week.goals);
   const [totalMinutes, setTotalMinutes] = useState<number>(0);
   const [totalHours, setTotalHours] = useState<number>(0);
@@ -112,32 +112,38 @@ export default function WeekPlan({}: Props): ReactElement {
     });
   };
 
+  const renderSummary = (goal: Goal) => {
+    return (
+      <div className={classes.goalRoot}>
+        <span>{goal.name}</span>
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => history.push(`/create-task/${goal.id}`)}
+          >
+            Add Task
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => dispatch(_deleteGoal(goal.id))}
+            style={{ marginLeft: 16 }}
+          >
+            Delete Goal
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   const renderGoals = () => {
     return goals.map((goal: Goal) => {
       return (
-        <React.Fragment key={goal.id}>
-          <div className={classes.goalRoot}>
-            <span>{goal.name}</span>
-            <div>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => history.push(`/create-task/${goal.id}`)}
-              >
-                Add Task
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => dispatch(_deleteGoal(goal.id))}
-                style={{ marginLeft: 16 }}
-              >
-                Delete Goal
-              </Button>
-            </div>
-          </div>
-          {renderTasks(goal.tasks)}
-        </React.Fragment>
+        <Accordion
+          renderSummary={() => renderSummary(goal)}
+          renderDetails={() => renderTasks(goal.tasks)}
+        />
       );
     });
   };
