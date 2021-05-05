@@ -97,6 +97,7 @@ namespace Week52.DataAccess.Repositories
                 {
                     foreach(var task in goal.Tasks)
                     {
+                        if (task.DayCompleted != 0)
                         foreach(var tag in task.Tags)
                         {
                             AddEstimation(tag.Id, task.Estimation);
