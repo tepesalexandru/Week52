@@ -9,6 +9,7 @@ using Week52.DataAccess.Context;
 using System;
 using Week52.Business.Managers;
 using Week52.DataAccess.Repositories;
+using Week52.Business.Engine;
 
 namespace Week52
 {
@@ -50,6 +51,9 @@ namespace Week52
             services.AddScoped<IWeekManager, WeekManager>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<ITagManager, TagManager>();
+            services.AddScoped<IAnalyticsManager, AnalyticsManager>();
+
+            services.AddScoped<IAnalyticsEngine, AnalyticsEngine>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -17,6 +17,7 @@ namespace Week52.DataAccess.Repositories
         BasicTask AddProgress(Guid TaskId, Progress progress);
         BasicTask CompleteTask(Guid TaskId, int Day);
         BasicTask UpdateNote(Guid TaskId, string Note);
+        int GetAllProgress(Guid TaskId);
     }
     public class TaskRepository : ITaskRepository
     {
@@ -91,6 +92,17 @@ namespace Week52.DataAccess.Repositories
             task.Note = Note;
             _dbContext.SaveChanges();
             return task;
+        }
+
+        public int GetAllProgress(Guid TaskId)
+        {
+            var task = _dbContext.Tasks.Include(x => x.ProgressByDay).FirstOrDefault(x => x.Id == TaskId);
+            int totalProgress = 0;
+            foreach(var progress in task.ProgressByDay)
+            {
+                totalProgress += progress.Minutes;
+            }
+            return totalProgress;
         }
     }
 
