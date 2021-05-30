@@ -46,3 +46,7 @@ export interface Tag extends Base {
   name: string;
   color: string;
 }
+export interface WeekProgress {
+  weekNumber: number;
+  progress: number;
+}

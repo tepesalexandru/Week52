@@ -1,16 +1,11 @@
 import React from "react";
 import { useStyles } from "./Styles/GoalAccordion";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import Typography from "@material-ui/core/Typography";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Goal, Tag, Task } from "../../../shared/Interfaces";
 import NoteDialog from "./NoteDialog";
 import CheckIcon from "@material-ui/icons/CheckCircle";
 import TagChip from "../../../shared/TagChip";
 import { getAllTaskProgress } from "./Helpers/_taskHelpers";
-import { Badge } from "@material-ui/core";
+import Accordion from "../../../shared/components/Accordion";
 
 interface Props {
   goal: Goal;
@@ -69,29 +64,10 @@ export default function GoalAccordion(props: Props) {
   };
 
   return (
-    <Accordion style={{ boxShadow: "none" }}>
-      <Badge
-        color="primary"
-        badgeContent={props.goal.tasks.length - countCompletedTasks()}
-        style={{ width: "100%" }}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        showZero={false}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-          classes={{ root: classes.summary, expandIcon: classes.expandIcon }}
-        >
-          <Typography className={classes.heading}>{props.goal.name}</Typography>
-        </AccordionSummary>
-      </Badge>
-      <AccordionDetails classes={{ root: classes.details }}>
-        {renderTasks()}
-      </AccordionDetails>
-    </Accordion>
+    <Accordion
+      renderDetails={renderTasks}
+      renderSummary={() => props.goal.name}
+      badgeValue={props.goal.tasks.length - countCompletedTasks()}
+    />
   );
 }

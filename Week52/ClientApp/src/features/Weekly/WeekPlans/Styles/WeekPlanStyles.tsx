@@ -22,8 +22,7 @@ export const useStyles = makeStyles((theme) => ({
   goalRoot: {
     background: theme.palette.secondary.main,
     borderRadius: 12,
-    padding: "12px 24px",
-    margin: "8px 0",
+    padding: "0px 24px",
     color: theme.palette.secondary.contrastText,
     display: "flex",
     justifyContent: "space-between",

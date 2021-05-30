@@ -5,26 +5,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: "100%",
     },
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      fontWeight: theme.typography.fontWeightRegular,
-    },
-    summary: {
-      background: theme.palette.secondary.main,
-      color: theme.palette.secondary.contrastText,
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      width: "100%",
-    },
-    details: {
-      background: "#121212",
-      padding: "8px 0px",
-      display: "block",
-    },
-    expandIcon: {
-      color: "#fff",
-    },
     taskRoot: {
       display: "flex",
       justifyContent: "flex-end",
